@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { motion } from "motion/react";
+import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { useConceptProgress, deriveProgressStats } from "@/lib/progress";
 import { StarField } from "@/components/illustrations/StarField";

@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, ArrowRight, Lightbulb, Check } from "lucide-react";
 import { learnFlowConcepts, type LearnConcept } from "@/data/learnFlow";
 import { acronymExpansions } from "@/lib/acronyms";
