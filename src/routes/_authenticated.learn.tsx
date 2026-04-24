@@ -11,6 +11,7 @@ import {
 } from "@/lib/progress";
 import { StarField } from "@/components/illustrations/StarField";
 import { AmbientParticles } from "@/components/illustrations/AmbientParticles";
+import { ConceptIllustration, hasIllustration } from "@/components/illustrations/ConceptIllustrations";
 import heroBg from "@/assets/hero-night.png";
 
 export const Route = createFileRoute("/_authenticated/learn")({
