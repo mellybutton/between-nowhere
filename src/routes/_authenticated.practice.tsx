@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { motion } from "motion/react";
+import { motion } from "framer-motion";
 import { ArrowRight, RotateCcw } from "lucide-react";
 import { buildPracticeExam, type Question } from "@/lib/questions";
 import { supabase } from "@/integrations/supabase/client";

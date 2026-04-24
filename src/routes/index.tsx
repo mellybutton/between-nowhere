@@ -1,5 +1,5 @@
 import { createFileRoute, Link, redirect } from "@tanstack/react-router";
-import { motion } from "motion/react";
+import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 import { StarField } from "@/components/illustrations/StarField";
 import { SignalWaves } from "@/components/illustrations/SignalWaves";
