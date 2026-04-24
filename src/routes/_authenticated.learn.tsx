@@ -275,6 +275,8 @@ function InsightStep({
     </motion.div>
   );
 }
+
+function TransitionStep({
   text,
   onContinue,
   percent,
