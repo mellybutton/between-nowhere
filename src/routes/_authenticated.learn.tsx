@@ -147,8 +147,9 @@ function LearnPage() {
             />
           )}
           {phase === "insight" && (
-            <StatementStep
+            <InsightStep
               key="insight"
+              conceptId={concept.id}
               text={concept.insight}
               onContinue={() => setPhase("question")}
               percent={stats.percent}
