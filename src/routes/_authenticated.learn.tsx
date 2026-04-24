@@ -235,7 +235,46 @@ function StatementStep({
   );
 }
 
-function TransitionStep({
+function InsightStep({
+  conceptId,
+  text,
+  onContinue,
+  percent,
+}: {
+  conceptId: string;
+  text: string;
+  onContinue: () => void;
+  percent: number;
+}) {
+  const showIllo = hasIllustration(conceptId);
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -12 }}
+      transition={{ duration: 0.6 }}
+      className="flex flex-1 flex-col"
+    >
+      <div className="flex flex-1 flex-col justify-center">
+        {showIllo && <ConceptIllustration conceptId={conceptId} />}
+        <p className="font-interface text-xs uppercase tracking-[0.18em] text-primary-accent">
+          Why this matters
+        </p>
+        <h2 className="mt-3 font-narrative text-[28px] leading-[1.2] text-foreground sm:text-3xl">
+          {text}
+        </h2>
+      </div>
+      <button
+        type="button"
+        onClick={onContinue}
+        className="mx-auto mt-8 inline-flex h-14 items-center justify-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-10 text-base font-medium text-foreground backdrop-blur-md transition-colors hover:bg-primary/20"
+      >
+        Next <ArrowRight className="h-4 w-4" />
+      </button>
+      <SignalFooter percent={percent} />
+    </motion.div>
+  );
+}
   text,
   onContinue,
   percent,
