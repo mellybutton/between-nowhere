@@ -1,5 +1,5 @@
 // Common radio acronyms and their expansions
-const ACRONYM_MAP: Record<string, string> = {
+export const acronymExpansions: Record<string, string> = {
   'SWR': 'Standing Wave Ratio',
   'VHF': 'Very High Frequency',
   'UHF': 'Ultra High Frequency',
