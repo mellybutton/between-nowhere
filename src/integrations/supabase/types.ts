@@ -14,7 +14,96 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      concept_progress: {
+        Row: {
+          attempts: number
+          completed_at: string | null
+          concept_id: string
+          created_at: string
+          id: string
+          status: string
+          updated_at: string
+          user_id: string
+          was_correct_first_try: boolean | null
+        }
+        Insert: {
+          attempts?: number
+          completed_at?: string | null
+          concept_id: string
+          created_at?: string
+          id?: string
+          status?: string
+          updated_at?: string
+          user_id: string
+          was_correct_first_try?: boolean | null
+        }
+        Update: {
+          attempts?: number
+          completed_at?: string | null
+          concept_id?: string
+          created_at?: string
+          id?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+          was_correct_first_try?: boolean | null
+        }
+        Relationships: []
+      }
+      practice_attempts: {
+        Row: {
+          answers: Json
+          created_at: string
+          id: string
+          question_ids: string[]
+          score: number
+          total: number
+          user_id: string
+          weak_categories: string[]
+        }
+        Insert: {
+          answers?: Json
+          created_at?: string
+          id?: string
+          question_ids?: string[]
+          score: number
+          total: number
+          user_id: string
+          weak_categories?: string[]
+        }
+        Update: {
+          answers?: Json
+          created_at?: string
+          id?: string
+          question_ids?: string[]
+          score?: number
+          total?: number
+          user_id?: string
+          weak_categories?: string[]
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          display_name: string | null
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          display_name?: string | null
+          id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
