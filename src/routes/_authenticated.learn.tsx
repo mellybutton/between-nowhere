@@ -10,6 +10,8 @@ import {
   deriveProgressStats,
 } from "@/lib/progress";
 import { StarField } from "@/components/illustrations/StarField";
+import { AmbientParticles } from "@/components/illustrations/AmbientParticles";
+import heroBg from "@/assets/hero-night.png";
 
 export const Route = createFileRoute("/_authenticated/learn")({
   component: LearnPage,
