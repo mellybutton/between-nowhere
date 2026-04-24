@@ -1,3 +1,4 @@
+import type { ReactElement } from "react";
 import { motion } from "framer-motion";
 
 /**
@@ -412,7 +413,7 @@ function LineOfSight() {
   );
 }
 
-const REGISTRY: Record<string, () => JSX.Element> = {
+const REGISTRY: Record<string, () => ReactElement> = {
   swr: SwrMismatch,
   offset: RepeaterOffset,
   simplex_vs_repeater: SimplexVsRepeater,
