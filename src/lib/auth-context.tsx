@@ -1,0 +1,53 @@
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import type { ReactNode } from "react";
+import type { Session, User } from "@supabase/supabase-js";
+import { supabase } from "@/integrations/supabase/client";
+
+type AuthState = {
+  session: Session | null;
+  user: User | null;
+  loading: boolean;
+};
+
+const AuthContext = createContext<AuthState>({
+  session: null,
+  user: null,
+  loading: true,
+});
+
+export function AuthProvider({ children }: { children: ReactNode }) {
+  const [session, setSession] = useState<Session | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Listener first (per Supabase guidance), then read existing session
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, newSession) => {
+      setSession(newSession);
+      setLoading(false);
+    });
+
+    supabase.auth.getSession().then(({ data: { session: existing } }) => {
+      setSession(existing);
+      setLoading(false);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const value = useMemo<AuthState>(
+    () => ({
+      session,
+      user: session?.user ?? null,
+      loading,
+    }),
+    [session, loading],
+  );
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+}
+
+export function useAuth() {
+  return useContext(AuthContext);
+}
