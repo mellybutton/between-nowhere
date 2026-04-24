@@ -29,7 +29,7 @@ export const acronymExpansions: Record<string, string> = {
  */
 export function detectAcronym(text: string): { acronym: string; expansion: string } | null {
   // Check for each acronym as a whole word
-  for (const [acronym, expansion] of Object.entries(ACRONYM_MAP)) {
+  for (const [acronym, expansion] of Object.entries(acronymExpansions)) {
     // Use word boundary regex to match whole words only
     const regex = new RegExp(`\\b${acronym}\\b`, 'i');
     if (regex.test(text)) {
