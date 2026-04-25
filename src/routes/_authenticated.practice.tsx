@@ -158,7 +158,7 @@ function PracticePage() {
       </h2>
 
       <ul className="mt-7 flex-1 space-y-3">
-        {current.officialAnswers.map((answer, i) => {
+        {currentAnswers.map((answer, i) => {
           const isSelected = selected === i;
           return (
             <li key={i}>
@@ -174,12 +174,24 @@ function PracticePage() {
                 <span className="mt-[2px] text-sm font-medium text-muted-foreground">
                   {String.fromCharCode(65 + i)}.
                 </span>
-                <span>{answer}</span>
+                <span>{answer.text}</span>
+                {isDev && answer.isCorrect && (
+                  <span className="ml-auto rounded bg-success/20 px-1.5 py-0.5 font-mono text-[10px] text-success">
+                    ✓
+                  </span>
+                )}
               </button>
             </li>
           );
         })}
       </ul>
+
+      {isDev && (
+        <p className="mt-2 font-mono text-[10px] text-muted-foreground/70">
+          [dev] id={current.id} · sourceCorrectIndex={current.correctIndex} ·
+          letter={current.correctLetter} · “{current.correctAnswerText}”
+        </p>
+      )}
 
       <button
         type="button"
