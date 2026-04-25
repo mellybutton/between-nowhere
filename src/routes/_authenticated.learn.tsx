@@ -56,6 +56,16 @@ function LearnPage() {
   const [wrongAttempts, setWrongAttempts] = useState(0);
   const [sessionStreak, setSessionStreak] = useState(0);
 
+  // Shuffle answers for the current concept. Re-shuffle when the concept changes.
+  const [displayAnswers, setDisplayAnswers] = useState<DisplayAnswer[]>([]);
+  useEffect(() => {
+    if (concept) {
+      setDisplayAnswers(
+        buildShuffledAnswers(concept.answers, concept.correctIndex),
+      );
+    }
+  }, [concept?.id]);
+
   // Long-running streak: completed concepts where first try was correct, in order.
   const baseStreak = useMemo(() => {
     const completed = (rows ?? [])
@@ -106,7 +116,8 @@ function LearnPage() {
 
   function submitAnswer() {
     if (selected === null) return;
-    const correct = selected === concept!.correctIndex;
+    // Evaluate against isCorrect on the displayed answer — never positional.
+    const correct = displayAnswers[selected]?.isCorrect === true;
     if (wasCorrectFirstTry === null) {
       setWasCorrectFirstTry(correct);
     }
