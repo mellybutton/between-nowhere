@@ -9,7 +9,7 @@ import {
 
 export function SignalFooter({ percent }: { percent: number }) {
   return (
-    <p className="mt-auto pb-6 text-center font-interface text-sm text-muted-foreground">
+    <p className="mt-auto pb-6 pt-6 text-center font-interface text-sm text-muted-foreground">
       Signal strength{" "}
       <span className="font-medium text-primary-accent">{percent}%</span>
     </p>
