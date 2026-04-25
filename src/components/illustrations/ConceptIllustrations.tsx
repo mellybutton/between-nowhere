@@ -108,6 +108,17 @@ const CANONICAL: Record<string, ComponentType> = {
   voltage_regulation: VoltageRegulator,
   transformer: TransformerCoupling,
   rf_exposure: RFExposureBoundary,
+  // Batch 5 — operating, modes, emergency, station
+  band_plans: BandPlanLanes,
+  cw_morse: CWMorsePulse,
+  callsign_exchange: CallsignExchange,
+  dummy_load: DummyLoadAbsorption,
+  emergency_net: EmergencyNetCoordination,
+  fm_vs_am: FMvsAMModulation,
+  weather_alert: NOAAWeatherAlert,
+  oscillation: OscillationFeedback,
+  packet_data: PacketBurstData,
+  tuning_resonance: TuningResonance,
 };
 
 // Aliases — match real concept ids / categories / tags from the dataset to
