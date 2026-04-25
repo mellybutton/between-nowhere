@@ -308,7 +308,7 @@ export function RevealStep({
         initial={{ opacity: 0, scale: 0.96 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-        className="rounded-2xl border border-success/40 bg-success/10 px-4 py-3.5"
+        className="mt-3 rounded-2xl border border-success/40 bg-success/10 px-4 py-3.5 sm:mt-4"
       >
         <div className="flex items-start justify-between gap-3">
           <h2 className="font-narrative text-2xl leading-tight text-success">
