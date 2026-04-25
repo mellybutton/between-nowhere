@@ -2,6 +2,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, Lightbulb, Check, Flame, Sparkles } from "lucide-react";
 import { acronymExpansions } from "@/lib/acronyms";
 import type { LearnConcept } from "@/data/learnFlow";
+import type { DisplayAnswer } from "@/lib/answers";
+import { isDev } from "@/lib/answers";
 import {
   ConceptIllustration,
   hasIllustration,
