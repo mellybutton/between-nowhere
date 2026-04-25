@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { learnFlowConcepts, type LearnConcept } from "@/data/learnFlow";
@@ -8,6 +8,7 @@ import {
   useRecordConcept,
   deriveProgressStats,
 } from "@/lib/progress";
+import { buildShuffledAnswers, type DisplayAnswer, isDev } from "@/lib/answers";
 import { StarField } from "@/components/illustrations/StarField";
 import { AmbientParticles } from "@/components/illustrations/AmbientParticles";
 import {
@@ -54,6 +55,16 @@ function LearnPage() {
   );
   const [wrongAttempts, setWrongAttempts] = useState(0);
   const [sessionStreak, setSessionStreak] = useState(0);
+
+  // Shuffle answers for the current concept. Re-shuffle when the concept changes.
+  const [displayAnswers, setDisplayAnswers] = useState<DisplayAnswer[]>([]);
+  useEffect(() => {
+    if (concept) {
+      setDisplayAnswers(
+        buildShuffledAnswers(concept.answers, concept.correctIndex),
+      );
+    }
+  }, [concept?.id]);
 
   // Long-running streak: completed concepts where first try was correct, in order.
   const baseStreak = useMemo(() => {
@@ -105,7 +116,8 @@ function LearnPage() {
 
   function submitAnswer() {
     if (selected === null) return;
-    const correct = selected === concept!.correctIndex;
+    // Evaluate against isCorrect on the displayed answer — never positional.
+    const correct = displayAnswers[selected]?.isCorrect === true;
     if (wasCorrectFirstTry === null) {
       setWasCorrectFirstTry(correct);
     }
@@ -188,6 +200,7 @@ function LearnPage() {
             <QuestionStep
               key="question"
               concept={concept}
+              displayAnswers={displayAnswers}
               selected={selected}
               setSelected={setSelected}
               showHint={showHint}

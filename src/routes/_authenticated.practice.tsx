@@ -9,6 +9,11 @@ import {
   Radio,
 } from "lucide-react";
 import { buildPracticeExam, type Question, categoryMap } from "@/lib/questions";
+import {
+  buildShuffledAnswers,
+  type DisplayAnswer,
+  isDev,
+} from "@/lib/answers";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import {
@@ -33,29 +38,30 @@ function PracticePage() {
   const { user } = useAuth();
   const [phase, setPhase] = useState<Phase>("intro");
   const [exam, setExam] = useState<Question[]>(() => buildPracticeExam());
-  const [index, setIndex] = useState(0);
-  const [answers, setAnswers] = useState<(number | null)[]>(() =>
-    Array.from({ length: 35 }, () => null),
+  // Per-question shuffled answers, built once when the exam starts.
+  const [shuffled, setShuffled] = useState<DisplayAnswer[][]>(() =>
+    exam.map((q) => buildShuffledAnswers(q.officialAnswers, q.correctIndex)),
   );
+  // Per-question correctness of the user's selection (null = unanswered).
+  const [correctness, setCorrectness] = useState<(boolean | null)[]>(() =>
+    Array.from({ length: exam.length }, () => null),
+  );
+  const [index, setIndex] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
 
   const current = exam[index];
+  const currentAnswers = shuffled[index] ?? [];
   const total = exam.length;
 
   const score = useMemo(
-    () =>
-      answers.reduce<number>(
-        (acc, a, i) =>
-          a !== null && a === exam[i].correctIndex ? acc + 1 : acc,
-        0,
-      ),
-    [answers, exam],
+    () => correctness.reduce<number>((acc, c) => (c === true ? acc + 1 : acc), 0),
+    [correctness],
   );
 
   const weakCategories = useMemo(() => {
     const missed: Record<string, number> = {};
-    answers.forEach((a, i) => {
-      if (a === null || a !== exam[i].correctIndex) {
+    correctness.forEach((c, i) => {
+      if (c !== true) {
         missed[exam[i].category] = (missed[exam[i].category] ?? 0) + 1;
       }
     });
@@ -63,12 +69,15 @@ function PracticePage() {
       .sort((a, b) => b[1] - a[1])
       .slice(0, 3)
       .map(([cat]) => cat);
-  }, [answers, exam]);
+  }, [correctness, exam]);
 
   function start() {
     const fresh = buildPracticeExam();
     setExam(fresh);
-    setAnswers(Array.from({ length: fresh.length }, () => null));
+    setShuffled(
+      fresh.map((q) => buildShuffledAnswers(q.officialAnswers, q.correctIndex)),
+    );
+    setCorrectness(Array.from({ length: fresh.length }, () => null));
     setIndex(0);
     setSelected(null);
     setPhase("running");
@@ -76,21 +85,21 @@ function PracticePage() {
 
   async function submitAnswer() {
     if (selected === null) return;
-    const next = [...answers];
-    next[index] = selected;
-    setAnswers(next);
+    const isCorrect = currentAnswers[selected]?.isCorrect === true;
+    const nextCorrectness = [...correctness];
+    nextCorrectness[index] = isCorrect;
+    setCorrectness(nextCorrectness);
     setSelected(null);
     if (index + 1 >= total) {
       if (user) {
-        const finalScore = next.reduce<number>(
-          (acc, a, i) =>
-            a !== null && a === exam[i].correctIndex ? acc + 1 : acc,
+        const finalScore = nextCorrectness.reduce<number>(
+          (acc, c) => (c === true ? acc + 1 : acc),
           0,
         );
         const finalWeak = (() => {
           const missed: Record<string, number> = {};
-          next.forEach((a, i) => {
-            if (a === null || a !== exam[i].correctIndex) {
+          nextCorrectness.forEach((c, i) => {
+            if (c !== true) {
               missed[exam[i].category] =
                 (missed[exam[i].category] ?? 0) + 1;
             }
@@ -106,7 +115,7 @@ function PracticePage() {
           total: exam.length,
           weak_categories: finalWeak,
           question_ids: exam.map((q) => q.id),
-          answers: next as unknown as Record<string, number>,
+          answers: nextCorrectness as unknown as Record<string, number>,
         });
       }
       setPhase("results");
@@ -149,7 +158,7 @@ function PracticePage() {
       </h2>
 
       <ul className="mt-7 flex-1 space-y-3">
-        {current.officialAnswers.map((answer, i) => {
+        {currentAnswers.map((answer, i) => {
           const isSelected = selected === i;
           return (
             <li key={i}>
@@ -165,12 +174,24 @@ function PracticePage() {
                 <span className="mt-[2px] text-sm font-medium text-muted-foreground">
                   {String.fromCharCode(65 + i)}.
                 </span>
-                <span>{answer}</span>
+                <span>{answer.text}</span>
+                {isDev && answer.isCorrect && (
+                  <span className="ml-auto rounded bg-success/20 px-1.5 py-0.5 font-mono text-[10px] text-success">
+                    ✓
+                  </span>
+                )}
               </button>
             </li>
           );
         })}
       </ul>
+
+      {isDev && (
+        <p className="mt-2 font-mono text-[10px] text-muted-foreground/70">
+          [dev] id={current.id} · sourceCorrectIndex={current.correctIndex} ·
+          letter={current.correctLetter} · “{current.correctAnswerText}”
+        </p>
+      )}
 
       <button
         type="button"

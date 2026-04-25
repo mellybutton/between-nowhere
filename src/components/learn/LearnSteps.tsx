@@ -2,6 +2,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, Lightbulb, Check, Flame, Sparkles } from "lucide-react";
 import { acronymExpansions } from "@/lib/acronyms";
 import type { LearnConcept } from "@/data/learnFlow";
+import type { DisplayAnswer } from "@/lib/answers";
+import { isDev } from "@/lib/answers";
 import {
   ConceptIllustration,
   hasIllustration,
@@ -146,6 +148,7 @@ export function TransitionStep({
 
 export function QuestionStep({
   concept,
+  displayAnswers,
   selected,
   setSelected,
   showHint,
@@ -156,6 +159,7 @@ export function QuestionStep({
   streak,
 }: {
   concept: LearnConcept;
+  displayAnswers: DisplayAnswer[];
   selected: number | null;
   setSelected: (n: number | null) => void;
   showHint: boolean;
@@ -225,7 +229,7 @@ export function QuestionStep({
       </AnimatePresence>
 
       <ul className="mt-3 space-y-2">
-        {concept.answers.map((answer, i) => {
+        {displayAnswers.map((answer, i) => {
           const letter = String.fromCharCode(65 + i);
           const isSelected = selected === i;
           return (
@@ -242,12 +246,24 @@ export function QuestionStep({
                 <span className="mt-[1px] text-[13px] font-medium text-muted-foreground">
                   {letter}.
                 </span>
-                <span>{answer}</span>
+                <span>{answer.text}</span>
+                {isDev && answer.isCorrect && (
+                  <span className="ml-auto rounded bg-success/20 px-1.5 py-0.5 font-mono text-[10px] text-success">
+                    ✓ correct
+                  </span>
+                )}
               </button>
             </li>
           );
         })}
       </ul>
+
+      {isDev && (
+        <p className="mt-2 font-mono text-[10px] text-muted-foreground/70">
+          [dev] id={concept.id} · sourceCorrectIndex={concept.correctIndex} ·
+          “{concept.correctAnswerText}”
+        </p>
+      )}
 
       <button
         type="button"
