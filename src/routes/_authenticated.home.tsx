@@ -25,6 +25,14 @@ function HomePage() {
   });
   const streakLabel = streakBadge(momentum.streak);
 
+  // Track in-flight navigation so cards can show a loading state
+  const pendingHref = useRouterState({
+    select: (s) =>
+      s.isLoading || s.isTransitioning
+        ? s.pendingMatches?.[s.pendingMatches.length - 1]?.pathname ?? null
+        : null,
+  });
+
   return (
     <div className="relative min-h-screen overflow-hidden bg-background">
       <div
