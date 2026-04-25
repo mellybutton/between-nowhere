@@ -118,10 +118,17 @@ function LearnPage() {
   }
 
   async function complete() {
+    const firstTry = wasCorrectFirstTry ?? false;
     await recordConcept.mutateAsync({
       conceptId: concept!.id,
-      wasCorrectFirstTry: wasCorrectFirstTry ?? false,
+      wasCorrectFirstTry: firstTry,
     });
+    if (firstTry) {
+      setSessionStreak((n) => n + 1);
+    } else {
+      // breaks the streak
+      setSessionStreak(0);
+    }
     setPhase("transition");
   }
 
