@@ -1,4 +1,5 @@
 import type { ComponentType } from "react";
+// Batch 1
 import { APRSBeacon } from "./concepts/APRSBeacon";
 import { AntennaPattern } from "./concepts/AntennaPattern";
 import { BatteryPower } from "./concepts/BatteryPower";
@@ -20,12 +21,23 @@ import { ModulationShape } from "./concepts/ModulationShape";
 import { NoiseFloor } from "./concepts/NoiseFloor";
 import { PublicServiceNetwork } from "./concepts/PublicServiceNetwork";
 import { SafetyBoundary } from "./concepts/SafetyBoundary";
+// Batch 3
+import { BreakerFuseProtection } from "./concepts/BreakerFuseProtection";
+import { DiffractionAroundObstacle } from "./concepts/DiffractionAroundObstacle";
+import { FeedlineLoss } from "./concepts/FeedlineLoss";
+import { MicrophoneGain } from "./concepts/MicrophoneGain";
+import { PolarizationMatch } from "./concepts/PolarizationMatch";
+import { PropagationReflection } from "./concepts/PropagationReflection";
+import { RefractionBend } from "./concepts/RefractionBend";
+import { SquelchThreshold } from "./concepts/SquelchThreshold";
+import { VHFvsUHFBehavior } from "./concepts/VHFvsUHFBehavior";
+import { VoltageCurrentFlow } from "./concepts/VoltageCurrentFlow";
 
 /**
  * Animated concept illustrations. Rendered as a floating element in the
- * top third of Learn / Insight / Feedback screens — never full-bleed, never
- * with text. Subtle opacity + glow keep them atmospheric over the existing
- * dark background.
+ * top third of Learn / Insight / Feedback / Review screens — never full-bleed,
+ * never with text. Subtle opacity + glow keep them atmospheric over the
+ * existing dark background.
  */
 
 // Canonical mapping: one entry per illustration component.
@@ -52,45 +64,73 @@ const CANONICAL: Record<string, ComponentType> = {
   licensing_rules: LicensingRules,
   public_service: PublicServiceNetwork,
   safe_operation: SafetyBoundary,
+  // Batch 3
+  propagation: PropagationReflection,
+  refraction: RefractionBend,
+  diffraction: DiffractionAroundObstacle,
+  vhf_uhf: VHFvsUHFBehavior,
+  feedline_loss: FeedlineLoss,
+  polarization: PolarizationMatch,
+  squelch: SquelchThreshold,
+  microphone_gain: MicrophoneGain,
+  voltage_current: VoltageCurrentFlow,
+  breakers_fuses: BreakerFuseProtection,
 };
 
 // Aliases — match real concept ids / categories / tags from the dataset to
 // the canonical illustrations above. Anything not listed falls back to
-// FrequencySpacing.
+// FrequencySpacing. Audited to use the richest available illustration for
+// each topic (e.g. polarization → PolarizationMatch, not AntennaPattern).
 const ALIASES: Record<string, keyof typeof CANONICAL> = {
-  // Line of sight family
+  // Line of sight
   line_of_sight: "line_of_sight",
-  vhf_uhf: "line_of_sight",
-  propagation: "line_of_sight",
   ground_wave: "line_of_sight",
-  skip_propagation: "line_of_sight",
 
-  // Interference family
+  // Propagation family (now have dedicated illustrations)
+  propagation: "propagation",
+  reflection: "propagation",
+  skip_propagation: "propagation",
+  refraction: "refraction",
+  diffraction: "diffraction",
+
+  // VHF / UHF behavior
+  vhf_uhf: "vhf_uhf",
+  propagation_bands: "vhf_uhf",
+  vhf: "vhf_uhf",
+  uhf: "vhf_uhf",
+
+  // Interference
   interference: "interference",
 
-  // Frequency / band family
+  // Frequency / band
   frequency: "frequency",
   band_plans: "frequency",
   fm_am: "frequency",
 
-  // Bandwidth + modulation (now have dedicated illustrations)
+  // Bandwidth + modulation
   bandwidth: "bandwidth",
   modulation: "modulation",
 
-  // Noise
+  // Noise / squelch
   noise_floor: "noise_floor",
+  squelch: "squelch",
+  noise_gate: "squelch",
+
+  // Audio / mic
+  microphone_gain: "microphone_gain",
+  audio_level: "microphone_gain",
 
   // Antennas
   antenna: "antenna",
   antennas: "antenna",
-  polarization: "antenna",
+  polarization: "polarization",
 
-  // Repeater family
+  // Repeater
   repeater: "repeater",
   repeaters: "repeater",
   simplex_vs_repeater: "repeater",
 
-  // Duplex / offset (now have dedicated illustration)
+  // Duplex / offset
   duplex: "duplex",
   duplex_operation: "duplex",
   offset: "duplex",
@@ -114,14 +154,22 @@ const ALIASES: Record<string, keyof typeof CANONICAL> = {
   safe_operation: "safe_operation",
   rf_exposure: "safe_operation",
 
-  // SWR / feedline
+  // SWR / feedline (now feedline_loss has its own)
   swr: "swr",
-  coax: "swr",
-  feedline_loss: "swr",
+  coax: "feedline_loss",
+  feedline_loss: "feedline_loss",
+  coax_loss: "feedline_loss",
 
-  // Grounding / electrical safety
+  // Electrical
+  voltage_current: "voltage_current",
+  electrical_flow: "voltage_current",
+  breakers_fuses: "breakers_fuses",
+  fuse: "breakers_fuses",
+  breaker: "breakers_fuses",
+  breaker_and_fuse: "breakers_fuses",
+
+  // Grounding
   grounding: "grounding",
-  breaker_and_fuse: "grounding",
 
   // Battery / power
   battery_power: "battery_power",
@@ -145,15 +193,17 @@ function resolveIllustration(conceptId: string): ComponentType {
 
 /**
  * Floating concept illustration. Sits in the top third of the screen with
- * subtle opacity + glow. Pure visual — no text inside.
+ * subtle opacity + glow. Pure visual — no text inside, non-interactive,
+ * mobile-first responsive sizing.
  */
 export function ConceptIllustration({ conceptId }: { conceptId: string }) {
   const Illo = resolveIllustration(conceptId);
   return (
     <div
       aria-hidden
-      className="pointer-events-none mx-auto mb-4 h-32 w-full max-w-[260px] opacity-70 sm:h-36"
+      className="pointer-events-none mx-auto mb-5 mt-4 flex h-32 w-full max-w-[260px] items-center justify-center opacity-95 sm:h-44 sm:max-w-[300px]"
       style={{
+        maxHeight: 180,
         filter: "drop-shadow(0 0 24px rgba(123, 137, 255, 0.25))",
       }}
     >
