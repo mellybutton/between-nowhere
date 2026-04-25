@@ -90,7 +90,7 @@ function IntroPage() {
           </Link>
         </div>
 
-        <div className="relative z-10 mx-auto flex flex-1 w-full max-w-md flex-col items-center justify-center px-6 text-center">
+        <div className="relative z-10 mx-auto flex w-full max-w-md flex-1 flex-col items-center justify-center gap-8 px-6 py-10 text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -137,7 +137,7 @@ function IntroPage() {
             initial={{ opacity: 0, scale: 0.94 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 1.15, duration: 0.7 }}
-            className="mt-10 flex w-full flex-col items-center gap-3"
+            className="flex w-full flex-col items-center gap-3"
           >
             <Link
               to="/auth"
@@ -157,7 +157,7 @@ function IntroPage() {
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.5, duration: 0.7 }}
-            className="mt-10 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 font-interface text-[11px] uppercase tracking-[0.16em] text-muted-foreground/85"
+            className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 font-interface text-[11px] uppercase tracking-[0.16em] text-muted-foreground/85"
           >
             <span className="flex items-center gap-1.5">
               <CheckCircle2 className="h-3 w-3 text-success" strokeWidth={2.25} />
