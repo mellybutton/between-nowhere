@@ -19,6 +19,9 @@ export const Route = createFileRoute("/_authenticated/home")({
 
 function HomePage() {
   const guest = isGuest();
+  const guestReturned = useGuestReturned(guest);
+  const [returnDismissed, setReturnDismissed] = useState(false);
+  const showReturnPrompt = guest && guestReturned && !returnDismissed;
   const { data: rows } = useConceptProgress();
   const realStats = deriveProgressStats(rows);
   const realMomentum = useMomentum();
