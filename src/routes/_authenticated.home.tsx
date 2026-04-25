@@ -82,6 +82,62 @@ function HomePage() {
           </p>
         </motion.div>
 
+        {/* Welcome-back prompt for guests returning to an idle tab */}
+        <AnimatePresence>
+          {showReturnPrompt && (
+            <motion.div
+              initial={{ opacity: 0, y: -8, height: 0 }}
+              animate={{ opacity: 1, y: 0, height: "auto" }}
+              exit={{ opacity: 0, y: -8, height: 0 }}
+              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              className="mt-5 overflow-hidden"
+            >
+              <div className="relative flex items-start gap-3 rounded-2xl border border-primary-accent/30 bg-gradient-to-br from-primary/15 to-accent/5 px-4 py-4 backdrop-blur-sm">
+                <div className="flex h-9 w-9 flex-none items-center justify-center rounded-full border border-primary-accent/30 bg-primary/15 text-primary-accent">
+                  <Bookmark className="h-4 w-4" strokeWidth={1.75} />
+                </div>
+                <div className="min-w-0 flex-1 pr-6">
+                  <p className="font-interface text-[14px] font-medium text-foreground">
+                    Still here? Want to keep your spot?
+                  </p>
+                  <p className="mt-0.5 font-interface text-[12px] leading-relaxed text-muted-foreground">
+                    Save now so this tab can close without losing the trail.
+                  </p>
+                  <div className="mt-3 flex items-center gap-3">
+                    <Link
+                      to="/auth"
+                      className="inline-flex h-9 items-center justify-center gap-1.5 rounded-full bg-primary px-4 font-interface text-[13px] font-medium text-primary-foreground transition-transform hover:scale-[1.02]"
+                    >
+                      Save my spot <ArrowRight className="h-3.5 w-3.5" />
+                    </Link>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        dismissGuestReturnPrompt();
+                        setReturnDismissed(true);
+                      }}
+                      className="font-interface text-[12px] text-muted-foreground transition-colors hover:text-foreground"
+                    >
+                      Not now
+                    </button>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    dismissGuestReturnPrompt();
+                    setReturnDismissed(true);
+                  }}
+                  aria-label="Dismiss"
+                  className="absolute right-3 top-3 flex h-6 w-6 items-center justify-center rounded-full text-muted-foreground/70 transition-colors hover:bg-card/60 hover:text-foreground"
+                >
+                  <X className="h-3.5 w-3.5" />
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {/* Returning + streak surface */}
         {(returning || streakLabel) && (
           <motion.div
