@@ -54,7 +54,7 @@ export function StatementStep({
       transition={{ duration: 0.6 }}
       className="flex flex-1 flex-col"
     >
-      <div className="pt-2">
+      <div className="pt-6 sm:pt-8">
         <h2 className="font-narrative text-[28px] leading-[1.15] text-foreground sm:text-4xl">
           {text}
         </h2>
@@ -91,7 +91,7 @@ export function InsightStep({
       transition={{ duration: 0.6 }}
       className="flex flex-1 flex-col"
     >
-      <div className="flex flex-col">
+      <div className="flex flex-col pt-4 sm:pt-6">
         {showIllo && <ConceptIllustration conceptId={conceptId} />}
         <p className="font-interface text-[11px] uppercase tracking-[0.18em] text-primary-accent">
           Why this matters
@@ -129,7 +129,7 @@ export function TransitionStep({
       transition={{ duration: 0.8 }}
       className="flex flex-1 flex-col"
     >
-      <div className="pt-2">
+      <div className="pt-8 sm:pt-12">
         <p className="font-narrative text-xl italic leading-relaxed text-foreground/85 sm:text-[26px]">
           {text}
         </p>
@@ -179,7 +179,7 @@ export function QuestionStep({
       transition={{ duration: 0.5 }}
       className="flex flex-1 flex-col"
     >
-      <h2 className="font-narrative text-[22px] leading-snug text-foreground sm:text-3xl">
+      <h2 className="mt-3 font-narrative text-[22px] leading-snug text-foreground sm:mt-4 sm:text-3xl">
         {concept.question}
       </h2>
       {(concept.acronym || acronymHint) && (
@@ -308,7 +308,7 @@ export function RevealStep({
         initial={{ opacity: 0, scale: 0.96 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-        className="rounded-2xl border border-success/40 bg-success/10 px-4 py-3.5"
+        className="mt-3 rounded-2xl border border-success/40 bg-success/10 px-4 py-3.5 sm:mt-4"
       >
         <div className="flex items-start justify-between gap-3">
           <h2 className="font-narrative text-2xl leading-tight text-success">
