@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { learnFlowConcepts, type LearnConcept } from "@/data/learnFlow";
@@ -8,6 +8,7 @@ import {
   useRecordConcept,
   deriveProgressStats,
 } from "@/lib/progress";
+import { buildShuffledAnswers, type DisplayAnswer, isDev } from "@/lib/answers";
 import { StarField } from "@/components/illustrations/StarField";
 import { AmbientParticles } from "@/components/illustrations/AmbientParticles";
 import {
