@@ -172,9 +172,12 @@ const ALIASES: Record<string, keyof typeof CANONICAL> = {
   // Public service / nets
   public_service: "public_service",
 
-  // Safety / RF exposure
-  safe_operation: "safe_operation",
-  rf_exposure: "safe_operation",
+  // Safety / RF exposure — RFExposureBoundary is the richer visualization
+  safe_operation: "rf_exposure",
+  rf_exposure: "rf_exposure",
+  safety_boundary: "rf_exposure",
+  rf_safety: "rf_exposure",
+  exposure_limits: "rf_exposure",
 
   // SWR / feedline (now feedline_loss has its own)
   swr: "swr",
@@ -182,9 +185,60 @@ const ALIASES: Record<string, keyof typeof CANONICAL> = {
   feedline_loss: "feedline_loss",
   coax_loss: "feedline_loss",
 
-  // Electrical
-  voltage_current: "voltage_current",
-  electrical_flow: "voltage_current",
+  // Electrical fundamentals — Ohm's law triangle is richest for V/I/R
+  ohms_law: "ohms_law",
+  voltage_current: "ohms_law",
+  resistance: "ohms_law",
+  voltage: "ohms_law",
+  current: "ohms_law",
+  ohm: "ohms_law",
+  // Raw current-flow animation kept for circuit-flow specific topics
+  electrical_flow: "electrical_flow",
+  current_flow: "electrical_flow",
+  circuit_flow: "electrical_flow",
+
+  // Reactive components
+  capacitance: "capacitance",
+  capacitor: "capacitance",
+  capacitors: "capacitance",
+  inductance: "inductance",
+  inductor: "inductance",
+  inductors: "inductance",
+  reactance: "capacitance",
+
+  // Schematics
+  schematic: "circuit_schematic",
+  circuit_schematic: "circuit_schematic",
+  schematics: "circuit_schematic",
+  schematic_symbols: "circuit_schematic",
+  circuit_symbols: "circuit_schematic",
+
+  // Semiconductors
+  diode: "diode",
+  diodes: "diode",
+  rectifier: "diode",
+  rectification: "diode",
+  led: "diode",
+  transistor: "transistor",
+  transistors: "transistor",
+  amplifier: "transistor",
+  amplification: "transistor",
+  switching: "transistor",
+
+  // Electromechanical
+  relay: "relay",
+  relays: "relay",
+
+  // Power conditioning
+  voltage_regulation: "voltage_regulation",
+  regulator: "voltage_regulation",
+  voltage_regulator: "voltage_regulation",
+  power_supply: "voltage_regulation",
+  transformer: "transformer",
+  transformers: "transformer",
+  coupling: "transformer",
+
+  // Breakers / fuses
   breakers_fuses: "breakers_fuses",
   fuse: "breakers_fuses",
   breaker: "breakers_fuses",
