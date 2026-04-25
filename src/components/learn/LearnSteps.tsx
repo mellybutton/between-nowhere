@@ -279,6 +279,7 @@ export function RevealStep({
 }) {
   const voice = correctAnswerCopy({ isFirstTry, streak });
   const isMomentum = streak >= 3;
+  const bridge = !isFirstTry ? explanationBridge() : "In other words";
   return (
     <motion.div
       initial={{ opacity: 0, y: 12 }}
