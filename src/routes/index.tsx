@@ -28,6 +28,7 @@ function IntroPage() {
       />
       {/* Subtle top-only vignette for headline legibility — bottom stays clear */}
       <div className="absolute inset-0 bg-gradient-to-b from-background/60 via-transparent to-transparent" />
+      <div className="absolute inset-0 bg-background/15" />
 
       <SignalWaves />
       <StarField density={20} />
