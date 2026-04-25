@@ -9,6 +9,7 @@ import {
 import {
   correctAnswerCopy,
   wrongAttemptCopy,
+  explanationBridge,
 } from "@/lib/feedback-voice";
 
 export function SignalFooter({
