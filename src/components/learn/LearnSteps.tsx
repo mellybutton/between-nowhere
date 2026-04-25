@@ -256,7 +256,7 @@ export function QuestionStep({
       >
         Submit <ArrowRight className="h-4 w-4" />
       </button>
-      <SignalFooter percent={percent} />
+      <SignalFooter percent={percent} streak={streak} />
     </motion.div>
   );
 }
