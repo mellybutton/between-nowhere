@@ -99,12 +99,12 @@ function AuthPage() {
       <div className="relative z-10 mx-auto flex min-h-screen max-w-md flex-col justify-center px-6">
         <div>
           <h1 className="font-narrative text-4xl leading-tight text-foreground">
-            {mode === "signup" ? "Find your frequency." : "Welcome back."}
+            {mode === "signup" ? "Save your progress." : "Welcome back."}
           </h1>
           <p className="mt-3 font-interface text-sm text-muted-foreground">
             {mode === "signup"
-              ? "Create an account so your progress travels with you."
-              : "Sign in to continue where you left off."}
+              ? "So when you come back tomorrow — or next week — you pick up exactly where you left off. No pressure, no spam."
+              : "Tune back in. Your signal's right where you left it."}
           </p>
         </div>
 
@@ -161,7 +161,7 @@ function AuthPage() {
             className="inline-flex h-14 w-full items-center justify-center gap-2 rounded-full bg-primary text-base font-medium text-primary-foreground shadow-[0_10px_40px_-15px_oklch(0.55_0.18_275/0.8)] transition-opacity disabled:opacity-50"
           >
             {submitting && <Loader2 className="h-4 w-4 animate-spin" />}
-            {mode === "signup" ? "Create account" : "Sign in"}
+            {mode === "signup" ? "Save my progress" : "Sign in"}
           </button>
         </form>
 
@@ -202,10 +202,10 @@ function AuthPage() {
             }}
             className="font-interface text-[13px] text-muted-foreground/80 underline decoration-dotted underline-offset-4 transition-colors hover:text-foreground"
           >
-            Continue as guest
+            Keep exploring as a guest
           </button>
           <p className="mt-1.5 font-interface text-[11px] text-muted-foreground/60">
-            No account · progress won't be saved
+            Progress stays only on this device
           </p>
         </div>
       </div>
