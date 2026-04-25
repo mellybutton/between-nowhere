@@ -4,6 +4,7 @@ import { ArrowRight, Flame, Loader2 } from "lucide-react";
 import { useConceptProgress, deriveProgressStats } from "@/lib/progress";
 import { useMomentum } from "@/lib/momentum";
 import { returningCopy, emptyStates, streakBadge } from "@/lib/feedback-voice";
+import { isGuest } from "@/lib/guest-mode";
 import { StarField } from "@/components/illustrations/StarField";
 import { AmbientParticles } from "@/components/illustrations/AmbientParticles";
 import heroBg from "@/assets/hero-night.webp";
