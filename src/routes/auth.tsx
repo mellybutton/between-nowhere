@@ -189,7 +189,7 @@ function AuthPage() {
             await enterGuestMode();
             navigate({ to: "/home" });
           }}
-          className="mt-4 inline-flex h-14 w-full items-center justify-center gap-2 rounded-full bg-primary text-base font-medium text-primary-foreground shadow-[0_10px_40px_-15px_oklch(0.55_0.18_275/0.8)] transition-transform hover:scale-[1.01] active:scale-[0.99]"
+          className="mt-4 inline-flex h-14 w-full items-center justify-center gap-2 rounded-full border border-border/60 bg-transparent text-sm font-medium text-foreground transition-colors hover:bg-card/40"
         >
           Just let me explore →
         </button>
