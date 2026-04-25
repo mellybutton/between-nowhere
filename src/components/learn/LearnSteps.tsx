@@ -201,11 +201,27 @@ export function QuestionStep({
         </p>
       )}
 
-      {attemptedWrong && (
-        <p className="mt-3 font-interface text-xs italic text-destructive/80">
-          Not quite — give it another look.
-        </p>
-      )}
+      <AnimatePresence>
+        {wrongCopy && (
+          <motion.div
+            key={`wrong-${wrongAttempts}`}
+            initial={{ opacity: 0, y: -4 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="mt-3 rounded-2xl border border-border/40 bg-card/30 px-4 py-3"
+          >
+            <p className="font-interface text-sm font-medium text-foreground">
+              {wrongCopy.headline}
+            </p>
+            {wrongCopy.body && (
+              <p className="mt-1 font-interface text-[13px] leading-relaxed text-muted-foreground">
+                {wrongCopy.body}
+              </p>
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <ul className="mt-5 flex-1 space-y-3">
         {concept.answers.map((answer, i) => {
