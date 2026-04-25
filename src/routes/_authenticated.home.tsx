@@ -22,7 +22,7 @@ function HomePage() {
         style={{ backgroundImage: `url(${heroBg})` }}
       />
       <div className="absolute inset-0 bg-gradient-to-b from-background/60 via-transparent to-transparent" />
-      <div className="absolute inset-0 bg-background/15" />
+      <div className="absolute inset-0 bg-background/30" />
       <StarField density={15} />
       <AmbientParticles count={10} />
 
