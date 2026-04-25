@@ -93,17 +93,12 @@ function IntroPage() {
         </div>
 
         <div className="relative z-10 mx-auto flex w-full max-w-md flex-1 flex-col items-center justify-center gap-8 px-6 py-10 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2, duration: 1 }}
-            className="space-y-5"
-          >
-            {/* Eyebrow — concrete value prop */}
+          <div className="space-y-5">
+            {/* Eyebrow — concrete value prop. Keeps a small entrance because it's decorative. */}
             <motion.div
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4, duration: 0.6 }}
+              transition={{ duration: 0.4 }}
               className="inline-flex items-center gap-2 rounded-full border border-primary-accent/30 bg-primary/10 px-3.5 py-1.5 backdrop-blur-md"
             >
               <Sparkles
@@ -115,61 +110,51 @@ function IntroPage() {
               </span>
             </motion.div>
 
-            <h1
-              className="font-narrative text-[44px] leading-[1.05] text-foreground sm:text-6xl"
-            >
+            {/* H1 + subhead render immediately at full opacity — they ARE the LCP */}
+            <h1 className="font-narrative text-[44px] leading-[1.05] text-foreground sm:text-6xl">
               Pass your
               <br />
               <span className="text-primary-accent">ham radio</span> exam.
             </h1>
 
-            <motion.p
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.85, duration: 0.7 }}
-              className="mx-auto max-w-sm font-interface text-base leading-relaxed text-foreground/85"
-            >
+            <p className="mx-auto max-w-sm font-interface text-base leading-relaxed text-foreground/85">
               A beginner-friendly study companion for the Amateur Radio
               Technician exam — and a quiet introduction to how communication
               works beyond the internet.
-            </motion.p>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, scale: 0.94 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 1.15, duration: 0.7 }}
-            className="flex w-full flex-col items-center gap-3"
-          >
-            <Link
-              to="/auth"
-              className="relative inline-flex h-14 w-full max-w-[280px] items-center justify-center gap-2 overflow-hidden rounded-full bg-primary text-base font-medium text-primary-foreground shadow-[0_10px_40px_-10px_oklch(0.55_0.18_275/0.7)] transition-transform hover:scale-[1.02] active:scale-[0.99]"
-            >
-              <span className="relative z-10">Start studying — free</span>
-              <ArrowRight className="relative z-10 h-4 w-4" />
-            </Link>
-
-            <p className="font-interface text-[12px] text-muted-foreground/80">
-              No credit card · ~10 minutes to your first concept
             </p>
+          </div>
 
+          {/* CTAs render immediately — no delay */}
+          <div className="flex w-full flex-col items-center gap-3">
             <button
               type="button"
               onClick={async () => {
                 await enterGuestMode();
                 navigate({ to: "/home" });
               }}
-              className="font-interface text-[12px] text-muted-foreground/85 underline decoration-dotted underline-offset-4 transition-colors hover:text-foreground"
+              className="relative inline-flex h-14 w-full max-w-[280px] items-center justify-center gap-2 overflow-hidden rounded-full bg-primary text-base font-medium text-primary-foreground shadow-[0_10px_40px_-10px_oklch(0.55_0.18_275/0.7)] transition-transform hover:scale-[1.02] active:scale-[0.99]"
             >
-              Or continue as guest — no sign-in, no progress saved
+              <span className="relative z-10">Start learning — free</span>
+              <ArrowRight className="relative z-10 h-4 w-4" />
             </button>
-          </motion.div>
+
+            <p className="font-interface text-[12px] text-muted-foreground/80">
+              No sign-up · No credit card · ~10 min to your first concept
+            </p>
+
+            <Link
+              to="/auth"
+              className="mt-1 font-interface text-[13px] text-foreground/75 underline decoration-dotted underline-offset-4 transition-colors hover:text-foreground"
+            >
+              Already have an account? Sign in
+            </Link>
+          </div>
 
           {/* Trust micro-row */}
           <motion.div
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.5, duration: 0.7 }}
+            transition={{ delay: 0.5, duration: 0.6 }}
             className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 font-interface text-[11px] uppercase tracking-[0.16em] text-muted-foreground/85"
           >
             <span className="flex items-center gap-1.5">
@@ -179,7 +164,7 @@ function IntroPage() {
             <span className="hidden h-3 w-px bg-border sm:inline-block" />
             <span className="flex items-center gap-1.5">
               <CheckCircle2 className="h-3 w-3 text-success" strokeWidth={2.25} />
-              Progress saved
+              Free forever
             </span>
             <span className="hidden h-3 w-px bg-border sm:inline-block" />
             <span className="flex items-center gap-1.5">
@@ -193,7 +178,7 @@ function IntroPage() {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 1.8, duration: 1 }}
+          transition={{ delay: 0.7, duration: 0.8 }}
           className="relative z-10 pb-6 text-center"
         >
           <p className="font-interface text-[11px] uppercase tracking-[0.2em] text-muted-foreground/60">
@@ -287,14 +272,18 @@ function IntroPage() {
             Your call sign is waiting.
           </h3>
           <p className="mt-3 font-interface text-sm text-muted-foreground">
-            Free to start. Your progress saves automatically.
+            Jump in as a guest. Save progress when you're ready.
           </p>
-          <Link
-            to="/auth"
+          <button
+            type="button"
+            onClick={async () => {
+              await enterGuestMode();
+              navigate({ to: "/home" });
+            }}
             className="mt-7 inline-flex h-14 w-full max-w-[280px] items-center justify-center gap-2 rounded-full bg-primary text-base font-medium text-primary-foreground shadow-[0_10px_40px_-10px_oklch(0.55_0.18_275/0.7)] transition-transform hover:scale-[1.02] active:scale-[0.99]"
           >
             Begin <ArrowRight className="h-4 w-4" />
-          </Link>
+          </button>
           <p className="mt-10 font-interface text-[11px] uppercase tracking-[0.2em] text-muted-foreground/60">
             Between Nowhere · Made for the curious
           </p>
