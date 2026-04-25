@@ -114,7 +114,7 @@ export function wrongAttemptCopy(opts: {
   };
 }
 
-// ---------- Explanation bridges (after a wrong answer is revealed) ----------
+// ---------- Explanation bridges (shown after a wrong answer is revealed) ----------
 
 const explanationBridges: string[] = [
   "Here's what matters:",
