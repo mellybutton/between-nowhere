@@ -292,10 +292,10 @@ export function RevealStep({
         initial={{ opacity: 0, scale: 0.96 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-        className="rounded-2xl border border-success/40 bg-success/10 px-5 py-5"
+        className="rounded-2xl border border-success/40 bg-success/10 px-4 py-3.5"
       >
         <div className="flex items-start justify-between gap-3">
-          <h2 className="font-narrative text-3xl leading-tight text-success">
+          <h2 className="font-narrative text-2xl leading-tight text-success">
             {isFirstTry ? voice.headline : voice.headline}
           </h2>
           {isMomentum && (
@@ -303,7 +303,7 @@ export function RevealStep({
               initial={{ opacity: 0, scale: 0.7 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
-              className="flex shrink-0 items-center gap-1 rounded-full border border-success/40 bg-success/15 px-2.5 py-1 font-interface text-[11px] font-medium text-success"
+              className="flex shrink-0 items-center gap-1 rounded-full border border-success/40 bg-success/15 px-2 py-0.5 font-interface text-[10px] font-medium text-success"
             >
               <Sparkles className="h-3 w-3" strokeWidth={2.25} />
               {streak}× clean
@@ -311,33 +311,33 @@ export function RevealStep({
           )}
         </div>
         {voice.body && (
-          <p className="mt-2 font-interface text-sm leading-relaxed text-success/85">
+          <p className="mt-1.5 font-interface text-[13px] leading-relaxed text-success/85">
             {voice.body}
           </p>
         )}
       </motion.div>
 
-      <div className="mt-4 rounded-2xl border border-border/40 bg-card/40 px-5 py-4">
-        <p className="flex items-center gap-2 font-interface text-xs uppercase tracking-wider text-muted-foreground">
-          <Check className="h-3.5 w-3.5 text-success" strokeWidth={2.5} />
+      <div className="mt-2.5 rounded-2xl border border-border/40 bg-card/40 px-4 py-3">
+        <p className="flex items-center gap-2 font-interface text-[10px] uppercase tracking-wider text-muted-foreground">
+          <Check className="h-3 w-3 text-success" strokeWidth={2.5} />
           Correct answer
         </p>
-        <p className="mt-2 font-interface text-base leading-snug text-foreground">
+        <p className="mt-1.5 font-interface text-[15px] leading-snug text-foreground">
           {concept.correctAnswerText}
         </p>
       </div>
 
-      <div className="mt-3 rounded-2xl border border-border/40 bg-card/40 px-5 py-4">
-        <p className="font-interface text-xs uppercase tracking-wider text-muted-foreground">
+      <div className="mt-2.5 rounded-2xl border border-border/40 bg-card/40 px-4 py-3">
+        <p className="font-interface text-[10px] uppercase tracking-wider text-muted-foreground">
           {bridge}
         </p>
-        <p className="mt-2 font-interface text-base leading-relaxed text-foreground">
+        <p className="mt-1.5 font-interface text-[14px] leading-relaxed text-foreground">
           {concept.eli5}
         </p>
       </div>
 
       {concept.whyItMatters && (
-        <p className="mt-3 rounded-2xl border border-border/30 bg-card/20 px-5 py-3 font-interface text-sm italic leading-relaxed text-muted-foreground">
+        <p className="mt-2.5 rounded-2xl border border-border/30 bg-card/20 px-4 py-2.5 font-interface text-[13px] italic leading-relaxed text-muted-foreground">
           {concept.whyItMatters}
         </p>
       )}
@@ -346,7 +346,7 @@ export function RevealStep({
         type="button"
         onClick={onContinue}
         disabled={loading}
-        className="mt-6 inline-flex h-14 w-full items-center justify-center gap-2 rounded-full bg-primary text-base font-medium text-primary-foreground disabled:opacity-50"
+        className="mt-4 inline-flex h-14 w-full items-center justify-center gap-2 rounded-full bg-primary text-base font-medium text-primary-foreground disabled:opacity-50"
       >
         Continue
       </button>
