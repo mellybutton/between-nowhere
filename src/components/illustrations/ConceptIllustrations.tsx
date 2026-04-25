@@ -146,10 +146,13 @@ const ALIASES: Record<string, keyof typeof CANONICAL> = {
   // Interference
   interference: "interference",
 
-  // Frequency / band
+  // Frequency / band — band_plans now has its own dedicated lanes visualization
   frequency: "frequency",
-  band_plans: "frequency",
-  fm_am: "frequency",
+  band_plans: "band_plans",
+  band_plan: "band_plans",
+  bandplan: "band_plans",
+  fm_am: "fm_vs_am",
+  fm_vs_am: "fm_vs_am",
 
   // Bandwidth + modulation
   bandwidth: "bandwidth",
@@ -182,17 +185,36 @@ const ALIASES: Record<string, keyof typeof CANONICAL> = {
   // CTCSS / access tones
   ctcss_tones: "ctcss_tones",
 
-  // Digital modes
+  // Digital modes — packet bursts visualize data-mode behavior best
   digital_modes: "digital_modes",
+  packet: "packet_data",
+  packet_radio: "packet_data",
+  packet_data: "packet_data",
+  data_modes: "packet_data",
+  cw: "cw_morse",
+  morse: "cw_morse",
+  cw_morse: "cw_morse",
 
-  // Callsigns / identity
-  callsigns: "callsigns",
+  // Callsigns / identity — exchange visualization is richer for on-air ID flow
+  callsigns: "callsign_exchange",
+  callsign: "callsign_exchange",
+  callsign_exchange: "callsign_exchange",
+  station_id: "callsign_exchange",
+  identification: "callsign_exchange",
+  identify: "callsign_exchange",
 
   // Licensing
   licensing_rules: "licensing_rules",
+  operating_etiquette: "licensing_rules",
+  listen_first: "licensing_rules",
 
-  // Public service / nets
-  public_service: "public_service",
+  // Public service / emergency nets — coordination is the richer visual
+  public_service: "emergency_net",
+  emergency_net: "emergency_net",
+  emergency_nets: "emergency_net",
+  net_operation: "emergency_net",
+  ares: "emergency_net",
+  races: "emergency_net",
 
   // Safety / RF exposure — RFExposureBoundary is the richer visualization
   safe_operation: "rf_exposure",
