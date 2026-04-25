@@ -18,10 +18,10 @@ function HomePage() {
   return (
     <div className="relative min-h-screen overflow-hidden bg-background">
       <div
-        className="absolute inset-0 bg-cover bg-top bg-no-repeat opacity-90"
+        className="absolute inset-0 bg-cover bg-bottom bg-no-repeat opacity-95"
         style={{ backgroundImage: `url(${heroBg})` }}
       />
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/30 to-background" />
+      <div className="absolute inset-0 bg-gradient-to-b from-background/60 via-transparent to-transparent" />
       <StarField density={15} />
       <AmbientParticles count={10} />
 
