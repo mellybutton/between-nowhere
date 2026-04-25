@@ -151,7 +151,8 @@ export function QuestionStep({
   setShowHint,
   onSubmit,
   percent,
-  attemptedWrong,
+  wrongAttempts,
+  streak,
 }: {
   concept: LearnConcept;
   selected: number | null;
@@ -160,9 +161,11 @@ export function QuestionStep({
   setShowHint: (s: boolean) => void;
   onSubmit: () => void;
   percent: number;
-  attemptedWrong: boolean;
+  wrongAttempts: number;
+  streak?: number;
 }) {
   const acronymHint = concept.acronym ? acronymExpansions[concept.acronym] : null;
+  const wrongCopy = wrongAttempts > 0 ? wrongAttemptCopy({ attempt: wrongAttempts }) : null;
   return (
     <motion.div
       initial={{ opacity: 0, y: 12 }}
