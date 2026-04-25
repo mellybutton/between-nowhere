@@ -202,6 +202,22 @@ function AuthPage() {
             ? "Already have an account? Sign in"
             : "New here? Create an account"}
         </button>
+
+        <div className="mt-6 text-center">
+          <button
+            type="button"
+            onClick={() => {
+              enterGuestMode();
+              navigate({ to: "/home" });
+            }}
+            className="font-interface text-[13px] text-muted-foreground/80 underline decoration-dotted underline-offset-4 transition-colors hover:text-foreground"
+          >
+            Continue as guest
+          </button>
+          <p className="mt-1.5 font-interface text-[11px] text-muted-foreground/60">
+            No account · progress won't be saved
+          </p>
+        </div>
       </div>
     </div>
   );
