@@ -212,7 +212,7 @@ function PracticeIntro({ onStart }: { onStart: () => void }) {
         </h1>
         <p className="mx-auto mt-4 max-w-xs font-interface text-sm leading-relaxed text-muted-foreground">
           Drawn at random from every Technician group — exactly like the FCC
-          exam. Pass mark: <span className="text-foreground">{PASS_MARK} / {total ? "" : ""}35</span>.
+          exam. Pass mark: <span className="text-foreground">{PASS_MARK} / 35</span>.
         </p>
       </div>
 
