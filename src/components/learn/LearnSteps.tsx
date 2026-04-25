@@ -52,15 +52,15 @@ export function StatementStep({
       transition={{ duration: 0.6 }}
       className="flex flex-1 flex-col"
     >
-      <div className="flex flex-1 items-center justify-center">
-        <h2 className="font-narrative text-[34px] leading-[1.15] text-foreground sm:text-4xl">
+      <div className="pt-2">
+        <h2 className="font-narrative text-[28px] leading-[1.15] text-foreground sm:text-4xl">
           {text}
         </h2>
       </div>
       <button
         type="button"
         onClick={onContinue}
-        className="mx-auto mt-8 inline-flex h-14 items-center justify-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-10 text-base font-medium text-foreground backdrop-blur-md transition-colors hover:bg-primary/20"
+        className="mx-auto mt-6 inline-flex h-14 items-center justify-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-10 text-base font-medium text-foreground backdrop-blur-md transition-colors hover:bg-primary/20"
       >
         Continue <ArrowRight className="h-4 w-4" />
       </button>
