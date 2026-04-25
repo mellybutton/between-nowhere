@@ -89,13 +89,6 @@ export const Route = createRootRouteWithContext<RouterContext>()({
         href: "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yygg_vb.woff2",
         crossOrigin: "anonymous",
       },
-      {
-        rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap",
-        media: "print",
-        // Swap to active stylesheet once loaded so it doesn't block initial render
-        onLoad: "this.media='all'",
-      },
     ],
   }),
   shellComponent: RootShell,
