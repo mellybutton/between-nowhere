@@ -52,9 +52,9 @@ export function StatementStep({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -12 }}
       transition={{ duration: 0.6 }}
-      className="flex flex-1 flex-col"
+      className="flex flex-1 flex-col items-center justify-center text-center"
     >
-      <div className="pt-6 sm:pt-8">
+      <div className="flex flex-1 flex-col items-center justify-center">
         <h2 className="font-narrative text-[28px] leading-[1.15] text-foreground sm:text-4xl">
           {text}
         </h2>
@@ -62,7 +62,7 @@ export function StatementStep({
       <button
         type="button"
         onClick={onContinue}
-        className="mx-auto mt-6 inline-flex h-14 items-center justify-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-10 text-base font-medium text-foreground backdrop-blur-md transition-colors hover:bg-primary/20"
+        className="mt-8 inline-flex h-14 items-center justify-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-10 text-base font-medium text-foreground backdrop-blur-md transition-colors hover:bg-primary/20"
       >
         Continue <ArrowRight className="h-4 w-4" />
       </button>
@@ -91,19 +91,19 @@ export function InsightStep({
       transition={{ duration: 0.6 }}
       className="flex flex-1 flex-col"
     >
-      <div className="flex flex-col pt-4 sm:pt-6">
-        {showIllo && <ConceptIllustration conceptId={conceptId} />}
+      {showIllo && <ConceptIllustration conceptId={conceptId} />}
+      <div className="flex flex-1 flex-col items-center justify-center text-center">
         <p className="font-interface text-[11px] uppercase tracking-[0.18em] text-primary-accent">
           Why this matters
         </p>
-        <h2 className="mt-2 font-narrative text-[24px] leading-[1.2] text-foreground sm:text-3xl">
+        <h2 className="mt-3 font-narrative text-[24px] leading-[1.25] text-foreground sm:text-3xl">
           {text}
         </h2>
       </div>
       <button
         type="button"
         onClick={onContinue}
-        className="mx-auto mt-6 inline-flex h-14 items-center justify-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-10 text-base font-medium text-foreground backdrop-blur-md transition-colors hover:bg-primary/20"
+        className="mx-auto mt-8 inline-flex h-14 items-center justify-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-10 text-base font-medium text-foreground backdrop-blur-md transition-colors hover:bg-primary/20"
       >
         Next <ArrowRight className="h-4 w-4" />
       </button>
@@ -127,9 +127,9 @@ export function TransitionStep({
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.8 }}
-      className="flex flex-1 flex-col"
+      className="flex flex-1 flex-col items-center justify-center text-center"
     >
-      <div className="pt-8 sm:pt-12">
+      <div className="flex flex-1 flex-col items-center justify-center">
         <p className="font-narrative text-xl italic leading-relaxed text-foreground/85 sm:text-[26px]">
           {text}
         </p>
@@ -137,7 +137,7 @@ export function TransitionStep({
       <button
         type="button"
         onClick={onContinue}
-        className="mx-auto mt-6 inline-flex h-14 items-center justify-center gap-2 rounded-full bg-primary px-10 text-base font-medium text-primary-foreground"
+        className="mt-8 inline-flex h-14 items-center justify-center gap-2 rounded-full bg-primary px-10 text-base font-medium text-primary-foreground"
       >
         Next concept <ArrowRight className="h-4 w-4" />
       </button>
