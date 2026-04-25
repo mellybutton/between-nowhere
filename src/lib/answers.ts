@@ -38,5 +38,15 @@ export function findCorrectDisplayIndex(displayed: DisplayAnswer[]): number {
   return displayed.findIndex((a) => a.isCorrect);
 }
 
-/** Dev-only check: in production this is a no-op. */
-export const isDev = import.meta.env.DEV;
+/**
+ * Debug overlay for answer evaluation. OFF by default everywhere.
+ * Toggle from the browser console:
+ *   localStorage.setItem("__answerDebug", "1"); location.reload();
+ *   localStorage.removeItem("__answerDebug"); location.reload();
+ */
+export const isAnswerDebug =
+  typeof window !== "undefined" &&
+  window.localStorage?.getItem("__answerDebug") === "1";
+
+/** @deprecated kept for backwards compatibility — use isAnswerDebug. */
+export const isDev = isAnswerDebug;
