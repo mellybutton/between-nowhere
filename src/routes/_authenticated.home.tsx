@@ -24,7 +24,7 @@ function HomePage() {
     ? { ...realStats, completed: 0, remaining: realStats.total, percent: 0 }
     : realStats;
   const momentum = guest
-    ? { ...realMomentum, streak: 0, daysSinceLast: null, lastAttempt: null }
+    ? { ...realMomentum, streak: 0, daysSinceLast: 0, lastAttempt: null }
     : realMomentum;
   const minutes = Math.max(1, Math.round(stats.remaining * 0.25));
   const isFresh = stats.completed === 0;
