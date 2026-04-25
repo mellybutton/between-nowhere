@@ -57,7 +57,10 @@ function ReviewPage() {
       <ul className="mt-8 space-y-3">
         {groups.map(([sub, count]) => (
           <li key={sub}>
-            <div className="flex items-center justify-between rounded-2xl border border-border/40 bg-card/40 px-5 py-4">
+            <Link
+              to="/learn"
+              className="group flex items-center justify-between rounded-2xl border border-border/40 bg-card/40 px-5 py-4 transition-colors hover:border-primary-accent/40 hover:bg-card/60"
+            >
               <div>
                 <p className="font-interface text-[11px] uppercase tracking-wider text-muted-foreground">
                   {sub}
@@ -66,10 +69,16 @@ function ReviewPage() {
                   {categoryMap[sub] ?? sub}
                 </p>
               </div>
-              <span className="font-interface text-sm font-mono-numeric text-muted-foreground">
-                {count}
-              </span>
-            </div>
+              <div className="flex items-center gap-3">
+                <span className="font-interface text-sm font-mono-numeric text-muted-foreground">
+                  {count}
+                </span>
+                <ArrowRight
+                  className="h-4 w-4 text-muted-foreground/60 transition-all group-hover:translate-x-0.5 group-hover:text-primary-accent"
+                  strokeWidth={1.75}
+                />
+              </div>
+            </Link>
           </li>
         ))}
       </ul>
