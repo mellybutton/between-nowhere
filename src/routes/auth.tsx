@@ -206,8 +206,8 @@ function AuthPage() {
         <div className="mt-6 text-center">
           <button
             type="button"
-            onClick={() => {
-              enterGuestMode();
+            onClick={async () => {
+              await enterGuestMode();
               navigate({ to: "/home" });
             }}
             className="font-interface text-[13px] text-muted-foreground/80 underline decoration-dotted underline-offset-4 transition-colors hover:text-foreground"

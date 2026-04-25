@@ -155,8 +155,8 @@ function IntroPage() {
 
             <button
               type="button"
-              onClick={() => {
-                enterGuestMode();
+              onClick={async () => {
+                await enterGuestMode();
                 navigate({ to: "/home" });
               }}
               className="font-interface text-[12px] text-muted-foreground/85 underline decoration-dotted underline-offset-4 transition-colors hover:text-foreground"
