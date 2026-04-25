@@ -1,7 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Flame } from "lucide-react";
 import { useConceptProgress, deriveProgressStats } from "@/lib/progress";
+import { useMomentum } from "@/lib/momentum";
+import { returningCopy, emptyStates, streakBadge } from "@/lib/feedback-voice";
 import { StarField } from "@/components/illustrations/StarField";
 import { AmbientParticles } from "@/components/illustrations/AmbientParticles";
 import heroBg from "@/assets/hero-night.png";
@@ -13,7 +15,15 @@ export const Route = createFileRoute("/_authenticated/home")({
 function HomePage() {
   const { data: rows } = useConceptProgress();
   const stats = deriveProgressStats(rows);
+  const momentum = useMomentum();
   const minutes = Math.max(1, Math.round(stats.remaining * 0.25));
+  const isFresh = stats.completed === 0;
+  const isComplete = stats.completed > 0 && stats.remaining === 0;
+  const returning = returningCopy({
+    daysSinceLast: momentum.daysSinceLast,
+    completed: stats.completed,
+  });
+  const streakLabel = streakBadge(momentum.streak);
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-background">
@@ -36,9 +46,42 @@ function HomePage() {
             Between Nowhere
           </h1>
           <p className="mt-1 font-interface text-sm italic text-muted-foreground">
-            Learning radio, one signal at a time
+            {isComplete
+              ? emptyStates.allConceptsDone.headline
+              : isFresh
+                ? emptyStates.homeFresh.headline
+                : "Learning radio, one signal at a time"}
           </p>
         </motion.div>
+
+        {/* Returning + streak surface */}
+        {(returning || streakLabel) && (
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="mt-5 flex items-start gap-3 rounded-2xl border border-border/40 bg-card/30 px-4 py-3 backdrop-blur-sm"
+          >
+            {streakLabel && (
+              <span className="flex shrink-0 items-center gap-1 rounded-full border border-primary-accent/30 bg-primary/10 px-2.5 py-1 font-interface text-[11px] text-primary-accent">
+                <Flame className="h-3 w-3" strokeWidth={2} />
+                {streakLabel}
+              </span>
+            )}
+            {returning && (
+              <div className="min-w-0">
+                <p className="font-interface text-[13px] font-medium text-foreground">
+                  {returning.headline}
+                </p>
+                {returning.body && (
+                  <p className="mt-0.5 font-interface text-[12px] leading-relaxed text-muted-foreground">
+                    {returning.body}
+                  </p>
+                )}
+              </div>
+            )}
+          </motion.div>
+        )}
 
         {/* Signal strength card */}
         <motion.div
