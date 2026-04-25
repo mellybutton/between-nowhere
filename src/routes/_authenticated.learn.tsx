@@ -194,7 +194,8 @@ function LearnPage() {
               setShowHint={setShowHint}
               onSubmit={submitAnswer}
               percent={stats.percent}
-              attemptedWrong={wasCorrectFirstTry === false}
+              wrongAttempts={wrongAttempts}
+              streak={currentStreak}
             />
           )}
           {phase === "reveal" && (
@@ -205,6 +206,7 @@ function LearnPage() {
               percent={stats.percent}
               isFirstTry={wasCorrectFirstTry === true}
               loading={recordConcept.isPending}
+              streak={currentStreak + (wasCorrectFirstTry ? 1 : 0)}
             />
           )}
           {phase === "transition" && (
