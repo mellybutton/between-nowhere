@@ -99,12 +99,12 @@ function AuthPage() {
       <div className="relative z-10 mx-auto flex min-h-screen max-w-md flex-col justify-center px-6">
         <div>
           <h1 className="font-narrative text-4xl leading-tight text-foreground">
-            {mode === "signup" ? "Find your frequency." : "Welcome back."}
+            {mode === "signup" ? "Save your progress." : "Welcome back."}
           </h1>
           <p className="mt-3 font-interface text-sm text-muted-foreground">
             {mode === "signup"
-              ? "Create an account so your progress travels with you."
-              : "Sign in to continue where you left off."}
+              ? "So when you come back tomorrow — or next week — you pick up exactly where you left off. No pressure, no spam."
+              : "Tune back in. Your signal's right where you left it."}
           </p>
         </div>
 
