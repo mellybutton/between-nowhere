@@ -202,10 +202,10 @@ function AuthPage() {
             }}
             className="font-interface text-[13px] text-muted-foreground/80 underline decoration-dotted underline-offset-4 transition-colors hover:text-foreground"
           >
-            Continue as guest
+            Keep exploring as a guest
           </button>
           <p className="mt-1.5 font-interface text-[11px] text-muted-foreground/60">
-            No account · progress won't be saved
+            Progress stays only on this device
           </p>
         </div>
       </div>
