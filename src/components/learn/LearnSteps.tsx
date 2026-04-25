@@ -179,7 +179,7 @@ export function QuestionStep({
       transition={{ duration: 0.5 }}
       className="flex flex-1 flex-col"
     >
-      <h2 className="font-narrative text-[22px] leading-snug text-foreground sm:text-3xl">
+      <h2 className="mt-3 font-narrative text-[22px] leading-snug text-foreground sm:mt-4 sm:text-3xl">
         {concept.question}
       </h2>
       {(concept.acronym || acronymHint) && (
