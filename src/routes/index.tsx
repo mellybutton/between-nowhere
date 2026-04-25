@@ -249,21 +249,16 @@ function IntroPage() {
             <Stat value="74%" label="to pass" />
           </motion.div>
 
-          <motion.blockquote
+          <motion.h3
             initial={{ opacity: 0, y: 12 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-60px" }}
             transition={{ duration: 0.7, delay: 0.1 }}
-            className="mt-10 border-l-2 border-primary-accent/50 pl-5"
+            className="mt-10 font-narrative text-[24px] leading-[1.3] text-foreground"
           >
-            <p className="font-narrative text-[20px] leading-[1.4] italic text-foreground/90">
-              "I came to pass the test. I left understanding why my walkie-talkie
-              works."
-            </p>
-            <footer className="mt-3 font-interface text-[12px] uppercase tracking-[0.16em] text-muted-foreground">
-              — The point of this app
-            </footer>
-          </motion.blockquote>
+            Practice to pass the test. Leave understanding why your
+            walkie-talkie works.
+          </motion.h3>
         </div>
       </section>
 
