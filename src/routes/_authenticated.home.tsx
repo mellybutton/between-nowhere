@@ -1,10 +1,14 @@
 import { createFileRoute, Link, useRouterState } from "@tanstack/react-router";
-import { motion } from "framer-motion";
-import { ArrowRight, Flame, Loader2 } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowRight, Flame, Loader2, X, Bookmark } from "lucide-react";
 import { useConceptProgress, deriveProgressStats } from "@/lib/progress";
 import { useMomentum } from "@/lib/momentum";
 import { returningCopy, emptyStates, streakBadge } from "@/lib/feedback-voice";
 import { isGuest } from "@/lib/guest-mode";
+import {
+  useGuestReturned,
+  dismissGuestReturnPrompt,
+} from "@/lib/guest-return";
 import { StarField } from "@/components/illustrations/StarField";
 import { AmbientParticles } from "@/components/illustrations/AmbientParticles";
 import heroBg from "@/assets/hero-night.webp";
