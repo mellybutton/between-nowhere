@@ -9,6 +9,7 @@ import {
 import {
   correctAnswerCopy,
   wrongAttemptCopy,
+  explanationBridge,
 } from "@/lib/feedback-voice";
 
 export function SignalFooter({
@@ -278,6 +279,7 @@ export function RevealStep({
 }) {
   const voice = correctAnswerCopy({ isFirstTry, streak });
   const isMomentum = streak >= 3;
+  const bridge = !isFirstTry ? explanationBridge() : "In other words";
   return (
     <motion.div
       initial={{ opacity: 0, y: 12 }}
@@ -327,7 +329,7 @@ export function RevealStep({
 
       <div className="mt-3 rounded-2xl border border-border/40 bg-card/40 px-5 py-4">
         <p className="font-interface text-xs uppercase tracking-wider text-muted-foreground">
-          In other words
+          {bridge}
         </p>
         <p className="mt-2 font-interface text-base leading-relaxed text-foreground">
           {concept.eli5}
