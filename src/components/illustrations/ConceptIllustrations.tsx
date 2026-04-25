@@ -43,6 +43,17 @@ import { RelaySwitch } from "./concepts/RelaySwitch";
 import { VoltageRegulator } from "./concepts/VoltageRegulator";
 import { TransformerCoupling } from "./concepts/TransformerCoupling";
 import { RFExposureBoundary } from "./concepts/RFExposureBoundary";
+// Batch 5 — operating, modes, emergency
+import { BandPlanLanes } from "./concepts/BandPlanLanes";
+import { CWMorsePulse } from "./concepts/CWMorsePulse";
+import { CallsignExchange } from "./concepts/CallsignExchange";
+import { DummyLoadAbsorption } from "./concepts/DummyLoadAbsorption";
+import { EmergencyNetCoordination } from "./concepts/EmergencyNetCoordination";
+import { FMvsAMModulation } from "./concepts/FMvsAMModulation";
+import { NOAAWeatherAlert } from "./concepts/NOAAWeatherAlert";
+import { OscillationFeedback } from "./concepts/OscillationFeedback";
+import { PacketBurstData } from "./concepts/PacketBurstData";
+import { TuningResonance } from "./concepts/TuningResonance";
 
 /**
  * Animated concept illustrations. Rendered as a floating element in the
