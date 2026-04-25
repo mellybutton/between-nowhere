@@ -8,7 +8,7 @@ import {
   ShieldCheck,
   ArrowRight,
 } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
+
 import { StarField } from "@/components/illustrations/StarField";
 import { SignalWaves } from "@/components/illustrations/SignalWaves";
 import { AmbientParticles } from "@/components/illustrations/AmbientParticles";
