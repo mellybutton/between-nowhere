@@ -52,9 +52,9 @@ export function StatementStep({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -12 }}
       transition={{ duration: 0.6 }}
-      className="flex flex-1 flex-col"
+      className="flex flex-1 flex-col items-center justify-center text-center"
     >
-      <div className="pt-6 sm:pt-8">
+      <div className="flex flex-1 flex-col items-center justify-center">
         <h2 className="font-narrative text-[28px] leading-[1.15] text-foreground sm:text-4xl">
           {text}
         </h2>
@@ -62,7 +62,7 @@ export function StatementStep({
       <button
         type="button"
         onClick={onContinue}
-        className="mx-auto mt-6 inline-flex h-14 items-center justify-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-10 text-base font-medium text-foreground backdrop-blur-md transition-colors hover:bg-primary/20"
+        className="mt-8 inline-flex h-14 items-center justify-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-10 text-base font-medium text-foreground backdrop-blur-md transition-colors hover:bg-primary/20"
       >
         Continue <ArrowRight className="h-4 w-4" />
       </button>
