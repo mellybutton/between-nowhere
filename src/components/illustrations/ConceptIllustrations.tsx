@@ -43,6 +43,17 @@ import { RelaySwitch } from "./concepts/RelaySwitch";
 import { VoltageRegulator } from "./concepts/VoltageRegulator";
 import { TransformerCoupling } from "./concepts/TransformerCoupling";
 import { RFExposureBoundary } from "./concepts/RFExposureBoundary";
+// Batch 5 — operating, modes, emergency
+import { BandPlanLanes } from "./concepts/BandPlanLanes";
+import { CWMorsePulse } from "./concepts/CWMorsePulse";
+import { CallsignExchange } from "./concepts/CallsignExchange";
+import { DummyLoadAbsorption } from "./concepts/DummyLoadAbsorption";
+import { EmergencyNetCoordination } from "./concepts/EmergencyNetCoordination";
+import { FMvsAMModulation } from "./concepts/FMvsAMModulation";
+import { NOAAWeatherAlert } from "./concepts/NOAAWeatherAlert";
+import { OscillationFeedback } from "./concepts/OscillationFeedback";
+import { PacketBurstData } from "./concepts/PacketBurstData";
+import { TuningResonance } from "./concepts/TuningResonance";
 
 /**
  * Animated concept illustrations. Rendered as a floating element in the
@@ -97,6 +108,17 @@ const CANONICAL: Record<string, ComponentType> = {
   voltage_regulation: VoltageRegulator,
   transformer: TransformerCoupling,
   rf_exposure: RFExposureBoundary,
+  // Batch 5 — operating, modes, emergency, station
+  band_plans: BandPlanLanes,
+  cw_morse: CWMorsePulse,
+  callsign_exchange: CallsignExchange,
+  dummy_load: DummyLoadAbsorption,
+  emergency_net: EmergencyNetCoordination,
+  fm_vs_am: FMvsAMModulation,
+  weather_alert: NOAAWeatherAlert,
+  oscillation: OscillationFeedback,
+  packet_data: PacketBurstData,
+  tuning_resonance: TuningResonance,
 };
 
 // Aliases — match real concept ids / categories / tags from the dataset to
@@ -124,10 +146,13 @@ const ALIASES: Record<string, keyof typeof CANONICAL> = {
   // Interference
   interference: "interference",
 
-  // Frequency / band
+  // Frequency / band — band_plans now has its own dedicated lanes visualization
   frequency: "frequency",
-  band_plans: "frequency",
-  fm_am: "frequency",
+  band_plans: "band_plans",
+  band_plan: "band_plans",
+  bandplan: "band_plans",
+  fm_am: "fm_vs_am",
+  fm_vs_am: "fm_vs_am",
 
   // Bandwidth + modulation
   bandwidth: "bandwidth",
@@ -160,17 +185,36 @@ const ALIASES: Record<string, keyof typeof CANONICAL> = {
   // CTCSS / access tones
   ctcss_tones: "ctcss_tones",
 
-  // Digital modes
+  // Digital modes — packet bursts visualize data-mode behavior best
   digital_modes: "digital_modes",
+  packet: "packet_data",
+  packet_radio: "packet_data",
+  packet_data: "packet_data",
+  data_modes: "packet_data",
+  cw: "cw_morse",
+  morse: "cw_morse",
+  cw_morse: "cw_morse",
 
-  // Callsigns / identity
-  callsigns: "callsigns",
+  // Callsigns / identity — exchange visualization is richer for on-air ID flow
+  callsigns: "callsign_exchange",
+  callsign: "callsign_exchange",
+  callsign_exchange: "callsign_exchange",
+  station_id: "callsign_exchange",
+  identification: "callsign_exchange",
+  identify: "callsign_exchange",
 
   // Licensing
   licensing_rules: "licensing_rules",
+  operating_etiquette: "licensing_rules",
+  listen_first: "licensing_rules",
 
-  // Public service / nets
-  public_service: "public_service",
+  // Public service / emergency nets — coordination is the richer visual
+  public_service: "emergency_net",
+  emergency_net: "emergency_net",
+  emergency_nets: "emergency_net",
+  net_operation: "emergency_net",
+  ares: "emergency_net",
+  races: "emergency_net",
 
   // Safety / RF exposure — RFExposureBoundary is the richer visualization
   safe_operation: "rf_exposure",
@@ -255,9 +299,33 @@ const ALIASES: Record<string, keyof typeof CANONICAL> = {
 
   // Weather
   weather_effects: "weather_effects",
+  weather_alert: "weather_alert",
+  noaa: "weather_alert",
+  noaa_alert: "weather_alert",
+  skywarn: "weather_alert",
+  weather_net: "weather_alert",
 
   // Digital beacons
   aprs: "aprs",
+
+  // Station setup — dummy load for testing without radiating
+  dummy_load: "dummy_load",
+  dummyload: "dummy_load",
+  test_load: "dummy_load",
+
+  // Tuning / resonance / antenna tuner
+  tuning: "tuning_resonance",
+  tuning_resonance: "tuning_resonance",
+  resonance: "tuning_resonance",
+  antenna_tuner: "tuning_resonance",
+  tuner: "tuning_resonance",
+  resonant_frequency: "tuning_resonance",
+
+  // Oscillation / feedback / unwanted self-oscillation
+  oscillation: "oscillation",
+  feedback: "oscillation",
+  oscillator: "oscillation",
+  self_oscillation: "oscillation",
 };
 
 function resolveIllustration(conceptId: string): ComponentType {
