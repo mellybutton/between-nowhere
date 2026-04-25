@@ -128,16 +128,19 @@ function HomePage() {
         >
           <Link
             to="/learn"
-            className="group block w-full overflow-hidden rounded-2xl border border-primary/30 bg-gradient-to-br from-primary/20 to-primary/5 p-5 text-left"
+            disabled={pendingHref === "/learn"}
+            className="group block w-full overflow-hidden rounded-2xl border border-primary/30 bg-gradient-to-br from-primary/20 to-primary/5 p-5 text-left transition-opacity disabled:pointer-events-none disabled:opacity-70"
           >
             <div className="flex items-center justify-between">
               <div>
                 <div className="font-interface font-medium text-foreground">
-                  {stats.completed === 0
-                    ? "Start learning"
-                    : stats.remaining === 0
-                      ? "Review what you know"
-                      : "Continue learning"}
+                  {pendingHref === "/learn"
+                    ? "Tuning in…"
+                    : stats.completed === 0
+                      ? "Start learning"
+                      : stats.remaining === 0
+                        ? "Review what you know"
+                        : "Continue learning"}
                 </div>
                 <div className="mt-1 font-interface text-xs text-muted-foreground">
                   {stats.remaining === 0
@@ -145,45 +148,71 @@ function HomePage() {
                     : `${stats.remaining} concepts remaining`}
                 </div>
               </div>
-              <ArrowRight
-                size={18}
-                strokeWidth={1.75}
-                className="text-primary-accent transition-transform group-hover:translate-x-1"
-              />
+              {pendingHref === "/learn" ? (
+                <Loader2
+                  size={18}
+                  strokeWidth={1.75}
+                  className="animate-spin text-primary-accent"
+                />
+              ) : (
+                <ArrowRight
+                  size={18}
+                  strokeWidth={1.75}
+                  className="text-primary-accent transition-transform group-hover:translate-x-1"
+                />
+              )}
             </div>
           </Link>
 
           <Link
             to="/practice"
-            className="block w-full rounded-2xl border border-border bg-card/50 p-5 text-left transition-colors hover:border-primary-accent/30"
+            disabled={pendingHref === "/practice"}
+            className="block w-full rounded-2xl border border-border bg-card/50 p-5 text-left transition-colors hover:border-primary-accent/30 disabled:pointer-events-none disabled:opacity-70"
           >
             <div className="flex items-center justify-between">
               <div>
                 <div className="font-interface font-medium text-foreground">
-                  Practice
+                  {pendingHref === "/practice" ? "Tuning in…" : "Practice"}
                 </div>
                 <div className="mt-1 font-interface text-xs text-muted-foreground">
                   35-question realistic exam
                 </div>
               </div>
-              <span className="text-xl">🎯</span>
+              {pendingHref === "/practice" ? (
+                <Loader2
+                  size={18}
+                  strokeWidth={1.75}
+                  className="animate-spin text-primary-accent"
+                />
+              ) : (
+                <span className="text-xl">🎯</span>
+              )}
             </div>
           </Link>
 
           <Link
             to="/review"
-            className="block w-full rounded-2xl border border-border bg-card/50 p-5 text-left transition-colors hover:border-primary-accent/30"
+            disabled={pendingHref === "/review"}
+            className="block w-full rounded-2xl border border-border bg-card/50 p-5 text-left transition-colors hover:border-primary-accent/30 disabled:pointer-events-none disabled:opacity-70"
           >
             <div className="flex items-center justify-between">
               <div>
                 <div className="font-interface font-medium text-foreground">
-                  Review
+                  {pendingHref === "/review" ? "Tuning in…" : "Review"}
                 </div>
                 <div className="mt-1 font-interface text-xs text-muted-foreground">
                   Browse all 409 questions
                 </div>
               </div>
-              <span className="text-xl">📖</span>
+              {pendingHref === "/review" ? (
+                <Loader2
+                  size={18}
+                  strokeWidth={1.75}
+                  className="animate-spin text-primary-accent"
+                />
+              ) : (
+                <span className="text-xl">📖</span>
+              )}
             </div>
           </Link>
         </motion.div>
