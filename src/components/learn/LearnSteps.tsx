@@ -148,6 +148,7 @@ export function TransitionStep({
 
 export function QuestionStep({
   concept,
+  displayAnswers,
   selected,
   setSelected,
   showHint,
@@ -158,6 +159,7 @@ export function QuestionStep({
   streak,
 }: {
   concept: LearnConcept;
+  displayAnswers: DisplayAnswer[];
   selected: number | null;
   setSelected: (n: number | null) => void;
   showHint: boolean;
