@@ -1,6 +1,6 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useRouterState } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { ArrowRight, Flame } from "lucide-react";
+import { ArrowRight, Flame, Loader2 } from "lucide-react";
 import { useConceptProgress, deriveProgressStats } from "@/lib/progress";
 import { useMomentum } from "@/lib/momentum";
 import { returningCopy, emptyStates, streakBadge } from "@/lib/feedback-voice";
