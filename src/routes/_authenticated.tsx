@@ -3,9 +3,12 @@ import { Link } from "@tanstack/react-router";
 import { Home as HomeIcon, Radio, Target, BookOpen } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
+import { isGuest } from "@/lib/guest-mode";
 
 export const Route = createFileRoute("/_authenticated")({
   beforeLoad: async () => {
+    // Allow guest mode (no account, no persistence) to bypass the auth gate.
+    if (isGuest()) return;
     const {
       data: { session },
     } = await supabase.auth.getSession();

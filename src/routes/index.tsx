@@ -1,4 +1,4 @@
-import { createFileRoute, Link, redirect } from "@tanstack/react-router";
+import { createFileRoute, Link, redirect, useNavigate } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import {
   CheckCircle2,
@@ -12,6 +12,7 @@ import {
 import { StarField } from "@/components/illustrations/StarField";
 import { SignalWaves } from "@/components/illustrations/SignalWaves";
 import { AmbientParticles } from "@/components/illustrations/AmbientParticles";
+import { enterGuestMode } from "@/lib/guest-mode";
 import heroBg from "@/assets/hero-night.webp";
 
 export const Route = createFileRoute("/")({
@@ -58,6 +59,7 @@ export const Route = createFileRoute("/")({
 });
 
 function IntroPage() {
+  const navigate = useNavigate();
   return (
     <div className="relative min-h-screen overflow-x-hidden bg-background">
       {/* Hero — viewport height */}
@@ -150,6 +152,17 @@ function IntroPage() {
             <p className="font-interface text-[12px] text-muted-foreground/80">
               No credit card · ~10 minutes to your first concept
             </p>
+
+            <button
+              type="button"
+              onClick={() => {
+                enterGuestMode();
+                navigate({ to: "/home" });
+              }}
+              className="font-interface text-[12px] text-muted-foreground/85 underline decoration-dotted underline-offset-4 transition-colors hover:text-foreground"
+            >
+              Or continue as guest — no sign-in, no progress saved
+            </button>
           </motion.div>
 
           {/* Trust micro-row */}

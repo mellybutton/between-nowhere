@@ -4,6 +4,7 @@ import { ArrowRight, Flame, Loader2 } from "lucide-react";
 import { useConceptProgress, deriveProgressStats } from "@/lib/progress";
 import { useMomentum } from "@/lib/momentum";
 import { returningCopy, emptyStates, streakBadge } from "@/lib/feedback-voice";
+import { isGuest } from "@/lib/guest-mode";
 import { StarField } from "@/components/illustrations/StarField";
 import { AmbientParticles } from "@/components/illustrations/AmbientParticles";
 import heroBg from "@/assets/hero-night.webp";
@@ -19,6 +20,7 @@ function HomePage() {
   const minutes = Math.max(1, Math.round(stats.remaining * 0.25));
   const isFresh = stats.completed === 0;
   const isComplete = stats.completed > 0 && stats.remaining === 0;
+  const guest = isGuest();
   const returning = returningCopy({
     daysSinceLast: momentum.daysSinceLast,
     completed: stats.completed,
@@ -61,6 +63,25 @@ function HomePage() {
                 : "Learning radio, one signal at a time"}
           </p>
         </motion.div>
+
+        {guest && (
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.05 }}
+            className="mt-4 flex flex-wrap items-center justify-between gap-2 rounded-full border border-border/40 bg-card/30 px-4 py-2 backdrop-blur-sm"
+          >
+            <span className="font-interface text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+              Guest mode · progress isn't saved
+            </span>
+            <Link
+              to="/auth"
+              className="font-interface text-[11px] uppercase tracking-[0.16em] text-primary-accent transition-opacity hover:opacity-80"
+            >
+              Save progress →
+            </Link>
+          </motion.div>
+        )}
 
         {/* Returning + streak surface */}
         {(returning || streakLabel) && (
