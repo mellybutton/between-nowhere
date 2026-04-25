@@ -9,6 +9,17 @@ import { LineOfSight } from "./concepts/LineOfSight";
 import { RepeaterRelay } from "./concepts/RepeaterRelay";
 import { SWRReflection } from "./concepts/SWRReflection";
 import { WeatherDistortion } from "./concepts/WeatherDistortion";
+// Batch 2
+import { BandwidthWidth } from "./concepts/BandwidthWidth";
+import { CTCSSAccessTone } from "./concepts/CTCSSAccessTone";
+import { CallsignIdentity } from "./concepts/CallsignIdentity";
+import { DigitalModes } from "./concepts/DigitalModes";
+import { DuplexOffset } from "./concepts/DuplexOffset";
+import { LicensingRules } from "./concepts/LicensingRules";
+import { ModulationShape } from "./concepts/ModulationShape";
+import { NoiseFloor } from "./concepts/NoiseFloor";
+import { PublicServiceNetwork } from "./concepts/PublicServiceNetwork";
+import { SafetyBoundary } from "./concepts/SafetyBoundary";
 
 /**
  * Animated concept illustrations. Rendered as a floating element in the
@@ -17,8 +28,9 @@ import { WeatherDistortion } from "./concepts/WeatherDistortion";
  * dark background.
  */
 
-// Canonical mapping (per spec)
+// Canonical mapping: one entry per illustration component.
 const CANONICAL: Record<string, ComponentType> = {
+  // Batch 1
   line_of_sight: LineOfSight,
   interference: Interference,
   frequency: FrequencySpacing,
@@ -29,6 +41,17 @@ const CANONICAL: Record<string, ComponentType> = {
   battery_power: BatteryPower,
   weather_effects: WeatherDistortion,
   aprs: APRSBeacon,
+  // Batch 2
+  bandwidth: BandwidthWidth,
+  modulation: ModulationShape,
+  noise_floor: NoiseFloor,
+  duplex: DuplexOffset,
+  ctcss_tones: CTCSSAccessTone,
+  digital_modes: DigitalModes,
+  callsigns: CallsignIdentity,
+  licensing_rules: LicensingRules,
+  public_service: PublicServiceNetwork,
+  safe_operation: SafetyBoundary,
 };
 
 // Aliases — match real concept ids / categories / tags from the dataset to
@@ -44,16 +67,18 @@ const ALIASES: Record<string, keyof typeof CANONICAL> = {
 
   // Interference family
   interference: "interference",
-  noise_floor: "interference",
-  rf_exposure: "interference",
 
-  // Frequency / bandwidth family
+  // Frequency / band family
   frequency: "frequency",
-  bandwidth: "frequency",
   band_plans: "frequency",
   fm_am: "frequency",
-  digital_modes: "frequency",
-  ctcss_tones: "frequency",
+
+  // Bandwidth + modulation (now have dedicated illustrations)
+  bandwidth: "bandwidth",
+  modulation: "modulation",
+
+  // Noise
+  noise_floor: "noise_floor",
 
   // Antennas
   antenna: "antenna",
@@ -64,8 +89,30 @@ const ALIASES: Record<string, keyof typeof CANONICAL> = {
   repeater: "repeater",
   repeaters: "repeater",
   simplex_vs_repeater: "repeater",
-  duplex_operation: "repeater",
-  offset: "repeater",
+
+  // Duplex / offset (now have dedicated illustration)
+  duplex: "duplex",
+  duplex_operation: "duplex",
+  offset: "duplex",
+
+  // CTCSS / access tones
+  ctcss_tones: "ctcss_tones",
+
+  // Digital modes
+  digital_modes: "digital_modes",
+
+  // Callsigns / identity
+  callsigns: "callsigns",
+
+  // Licensing
+  licensing_rules: "licensing_rules",
+
+  // Public service / nets
+  public_service: "public_service",
+
+  // Safety / RF exposure
+  safe_operation: "safe_operation",
+  rf_exposure: "safe_operation",
 
   // SWR / feedline
   swr: "swr",
@@ -87,8 +134,6 @@ const ALIASES: Record<string, keyof typeof CANONICAL> = {
 
   // Digital beacons
   aprs: "aprs",
-
-  // Operating procedure → no obvious match, fall back via FrequencySpacing
 };
 
 function resolveIllustration(conceptId: string): ComponentType {
