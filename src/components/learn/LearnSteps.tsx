@@ -20,13 +20,13 @@ export function SignalFooter({
   streak?: number;
 }) {
   return (
-    <div className="mt-auto flex items-center justify-center gap-3 pb-6 pt-6">
-      <p className="text-center font-interface text-sm text-muted-foreground">
+    <div className="mt-6 flex items-center justify-center gap-3 pb-2 pt-2">
+      <p className="text-center font-interface text-xs text-muted-foreground">
         Signal strength{" "}
         <span className="font-medium text-primary-accent">{percent}%</span>
       </p>
       {streak !== undefined && streak >= 2 && (
-        <span className="flex items-center gap-1 rounded-full border border-primary-accent/30 bg-primary/10 px-2.5 py-1 font-interface text-[11px] text-primary-accent">
+        <span className="flex items-center gap-1 rounded-full border border-primary-accent/30 bg-primary/10 px-2 py-0.5 font-interface text-[10px] text-primary-accent">
           <Flame className="h-3 w-3" strokeWidth={2} />
           {streak} streak
         </span>
@@ -52,15 +52,15 @@ export function StatementStep({
       transition={{ duration: 0.6 }}
       className="flex flex-1 flex-col"
     >
-      <div className="flex flex-1 items-center justify-center">
-        <h2 className="font-narrative text-[34px] leading-[1.15] text-foreground sm:text-4xl">
+      <div className="pt-2">
+        <h2 className="font-narrative text-[28px] leading-[1.15] text-foreground sm:text-4xl">
           {text}
         </h2>
       </div>
       <button
         type="button"
         onClick={onContinue}
-        className="mx-auto mt-8 inline-flex h-14 items-center justify-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-10 text-base font-medium text-foreground backdrop-blur-md transition-colors hover:bg-primary/20"
+        className="mx-auto mt-6 inline-flex h-14 items-center justify-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-10 text-base font-medium text-foreground backdrop-blur-md transition-colors hover:bg-primary/20"
       >
         Continue <ArrowRight className="h-4 w-4" />
       </button>
@@ -89,19 +89,19 @@ export function InsightStep({
       transition={{ duration: 0.6 }}
       className="flex flex-1 flex-col"
     >
-      <div className="flex flex-1 flex-col justify-center">
+      <div className="flex flex-col">
         {showIllo && <ConceptIllustration conceptId={conceptId} />}
-        <p className="font-interface text-xs uppercase tracking-[0.18em] text-primary-accent">
+        <p className="font-interface text-[11px] uppercase tracking-[0.18em] text-primary-accent">
           Why this matters
         </p>
-        <h2 className="mt-3 font-narrative text-[28px] leading-[1.2] text-foreground sm:text-3xl">
+        <h2 className="mt-2 font-narrative text-[24px] leading-[1.2] text-foreground sm:text-3xl">
           {text}
         </h2>
       </div>
       <button
         type="button"
         onClick={onContinue}
-        className="mx-auto mt-8 inline-flex h-14 items-center justify-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-10 text-base font-medium text-foreground backdrop-blur-md transition-colors hover:bg-primary/20"
+        className="mx-auto mt-6 inline-flex h-14 items-center justify-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-10 text-base font-medium text-foreground backdrop-blur-md transition-colors hover:bg-primary/20"
       >
         Next <ArrowRight className="h-4 w-4" />
       </button>
@@ -127,15 +127,15 @@ export function TransitionStep({
       transition={{ duration: 0.8 }}
       className="flex flex-1 flex-col"
     >
-      <div className="flex flex-1 items-center justify-center">
-        <p className="font-narrative text-2xl italic leading-relaxed text-foreground/85 sm:text-[26px]">
+      <div className="pt-2">
+        <p className="font-narrative text-xl italic leading-relaxed text-foreground/85 sm:text-[26px]">
           {text}
         </p>
       </div>
       <button
         type="button"
         onClick={onContinue}
-        className="mx-auto mt-8 inline-flex h-14 items-center justify-center gap-2 rounded-full bg-primary px-10 text-base font-medium text-primary-foreground"
+        className="mx-auto mt-6 inline-flex h-14 items-center justify-center gap-2 rounded-full bg-primary px-10 text-base font-medium text-primary-foreground"
       >
         Next concept <ArrowRight className="h-4 w-4" />
       </button>
@@ -175,11 +175,11 @@ export function QuestionStep({
       transition={{ duration: 0.5 }}
       className="flex flex-1 flex-col"
     >
-      <h2 className="font-narrative text-[26px] leading-snug text-foreground sm:text-3xl">
+      <h2 className="font-narrative text-[22px] leading-snug text-foreground sm:text-3xl">
         {concept.question}
       </h2>
       {(concept.acronym || acronymHint) && (
-        <p className="mt-2 font-interface text-sm text-muted-foreground">
+        <p className="mt-1.5 font-interface text-xs text-muted-foreground">
           {concept.acronym}
           {acronymHint ? ` (${acronymHint})` : ""}
         </p>
@@ -188,16 +188,16 @@ export function QuestionStep({
       <button
         type="button"
         onClick={() => setShowHint(!showHint)}
-        className="mt-6 flex w-full items-center justify-between rounded-2xl border border-border/40 bg-card/40 px-4 py-3.5 text-left font-interface text-sm transition-colors hover:bg-card/60"
+        className="mt-3 flex w-full items-center justify-between rounded-xl border border-border/40 bg-card/40 px-3.5 py-2.5 text-left font-interface text-[13px] transition-colors hover:bg-card/60"
       >
         <span className="flex items-center gap-2 text-foreground">
-          <Lightbulb className="h-4 w-4 text-primary-accent" strokeWidth={1.75} />
+          <Lightbulb className="h-3.5 w-3.5 text-primary-accent" strokeWidth={1.75} />
           {showHint ? "Hide hint" : "Need a hint?"}
         </span>
         <span className="text-muted-foreground">{showHint ? "−" : "▾"}</span>
       </button>
       {showHint && concept.hint && (
-        <p className="mt-2 rounded-2xl border border-border/40 bg-card/30 px-4 py-3 font-interface text-sm leading-relaxed text-muted-foreground">
+        <p className="mt-2 rounded-xl border border-border/40 bg-card/30 px-3.5 py-2.5 font-interface text-[13px] leading-relaxed text-muted-foreground">
           {concept.hint}
         </p>
       )}
@@ -210,13 +210,13 @@ export function QuestionStep({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="mt-3 rounded-2xl border border-border/40 bg-card/30 px-4 py-3"
+            className="mt-2 rounded-xl border border-border/40 bg-card/30 px-3.5 py-2.5"
           >
-            <p className="font-interface text-sm font-medium text-foreground">
+            <p className="font-interface text-[13px] font-medium text-foreground">
               {wrongCopy.headline}
             </p>
             {wrongCopy.body && (
-              <p className="mt-1 font-interface text-[13px] leading-relaxed text-muted-foreground">
+              <p className="mt-0.5 font-interface text-[12px] leading-relaxed text-muted-foreground">
                 {wrongCopy.body}
               </p>
             )}
@@ -224,7 +224,7 @@ export function QuestionStep({
         )}
       </AnimatePresence>
 
-      <ul className="mt-5 flex-1 space-y-3">
+      <ul className="mt-3 space-y-2">
         {concept.answers.map((answer, i) => {
           const letter = String.fromCharCode(65 + i);
           const isSelected = selected === i;
@@ -233,13 +233,13 @@ export function QuestionStep({
               <button
                 type="button"
                 onClick={() => setSelected(i)}
-                className={`flex w-full items-start gap-4 rounded-2xl border px-4 py-4 text-left font-interface text-[15px] leading-snug transition-all ${
+                className={`flex w-full items-start gap-3 rounded-xl border px-3.5 py-3 text-left font-interface text-[14px] leading-snug transition-all ${
                   isSelected
                     ? "border-primary bg-primary/10 text-foreground"
                     : "border-border/40 bg-card/30 text-foreground hover:border-border/80"
                 }`}
               >
-                <span className="mt-[2px] text-sm font-medium text-muted-foreground">
+                <span className="mt-[1px] text-[13px] font-medium text-muted-foreground">
                   {letter}.
                 </span>
                 <span>{answer}</span>
@@ -253,7 +253,7 @@ export function QuestionStep({
         type="button"
         onClick={onSubmit}
         disabled={selected === null}
-        className="mt-6 inline-flex h-14 w-full items-center justify-center gap-2 rounded-full bg-primary text-base font-medium text-primary-foreground transition-opacity disabled:cursor-not-allowed disabled:opacity-40"
+        className="mt-4 inline-flex h-14 w-full items-center justify-center gap-2 rounded-full bg-primary text-base font-medium text-primary-foreground transition-opacity disabled:cursor-not-allowed disabled:opacity-40"
       >
         Submit <ArrowRight className="h-4 w-4" />
       </button>
@@ -292,10 +292,10 @@ export function RevealStep({
         initial={{ opacity: 0, scale: 0.96 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-        className="rounded-2xl border border-success/40 bg-success/10 px-5 py-5"
+        className="rounded-2xl border border-success/40 bg-success/10 px-4 py-3.5"
       >
         <div className="flex items-start justify-between gap-3">
-          <h2 className="font-narrative text-3xl leading-tight text-success">
+          <h2 className="font-narrative text-2xl leading-tight text-success">
             {isFirstTry ? voice.headline : voice.headline}
           </h2>
           {isMomentum && (
@@ -303,7 +303,7 @@ export function RevealStep({
               initial={{ opacity: 0, scale: 0.7 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
-              className="flex shrink-0 items-center gap-1 rounded-full border border-success/40 bg-success/15 px-2.5 py-1 font-interface text-[11px] font-medium text-success"
+              className="flex shrink-0 items-center gap-1 rounded-full border border-success/40 bg-success/15 px-2 py-0.5 font-interface text-[10px] font-medium text-success"
             >
               <Sparkles className="h-3 w-3" strokeWidth={2.25} />
               {streak}× clean
@@ -311,33 +311,33 @@ export function RevealStep({
           )}
         </div>
         {voice.body && (
-          <p className="mt-2 font-interface text-sm leading-relaxed text-success/85">
+          <p className="mt-1.5 font-interface text-[13px] leading-relaxed text-success/85">
             {voice.body}
           </p>
         )}
       </motion.div>
 
-      <div className="mt-4 rounded-2xl border border-border/40 bg-card/40 px-5 py-4">
-        <p className="flex items-center gap-2 font-interface text-xs uppercase tracking-wider text-muted-foreground">
-          <Check className="h-3.5 w-3.5 text-success" strokeWidth={2.5} />
+      <div className="mt-2.5 rounded-2xl border border-border/40 bg-card/40 px-4 py-3">
+        <p className="flex items-center gap-2 font-interface text-[10px] uppercase tracking-wider text-muted-foreground">
+          <Check className="h-3 w-3 text-success" strokeWidth={2.5} />
           Correct answer
         </p>
-        <p className="mt-2 font-interface text-base leading-snug text-foreground">
+        <p className="mt-1.5 font-interface text-[15px] leading-snug text-foreground">
           {concept.correctAnswerText}
         </p>
       </div>
 
-      <div className="mt-3 rounded-2xl border border-border/40 bg-card/40 px-5 py-4">
-        <p className="font-interface text-xs uppercase tracking-wider text-muted-foreground">
+      <div className="mt-2.5 rounded-2xl border border-border/40 bg-card/40 px-4 py-3">
+        <p className="font-interface text-[10px] uppercase tracking-wider text-muted-foreground">
           {bridge}
         </p>
-        <p className="mt-2 font-interface text-base leading-relaxed text-foreground">
+        <p className="mt-1.5 font-interface text-[14px] leading-relaxed text-foreground">
           {concept.eli5}
         </p>
       </div>
 
       {concept.whyItMatters && (
-        <p className="mt-3 rounded-2xl border border-border/30 bg-card/20 px-5 py-3 font-interface text-sm italic leading-relaxed text-muted-foreground">
+        <p className="mt-2.5 rounded-2xl border border-border/30 bg-card/20 px-4 py-2.5 font-interface text-[13px] italic leading-relaxed text-muted-foreground">
           {concept.whyItMatters}
         </p>
       )}
@@ -346,7 +346,7 @@ export function RevealStep({
         type="button"
         onClick={onContinue}
         disabled={loading}
-        className="mt-6 inline-flex h-14 w-full items-center justify-center gap-2 rounded-full bg-primary text-base font-medium text-primary-foreground disabled:opacity-50"
+        className="mt-4 inline-flex h-14 w-full items-center justify-center gap-2 rounded-full bg-primary text-base font-medium text-primary-foreground disabled:opacity-50"
       >
         Continue
       </button>

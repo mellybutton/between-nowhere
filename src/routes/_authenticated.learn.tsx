@@ -165,7 +165,7 @@ function LearnPage() {
         <ArrowLeft className="h-4 w-4" />
       </button>
 
-      <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-md flex-col px-6 pt-20">
+      <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-md flex-col px-6 pb-24 pt-16">
         <AnimatePresence mode="wait">
           {phase === "hook" && (
             <StatementStep
