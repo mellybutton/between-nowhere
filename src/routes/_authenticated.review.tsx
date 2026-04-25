@@ -47,6 +47,11 @@ export const Route = createFileRoute("/_authenticated/review")({
 function ReviewPage() {
   const { data: rows } = useConceptProgress();
   const stats = deriveProgressStats(rows);
+  const { data: attempts } = usePracticeAnswers();
+  const mastery = useMemo(
+    () => deriveSubelementMastery(attempts),
+    [attempts],
+  );
 
   const groups = useMemo(() => {
     const counts: Record<string, number> = {};
