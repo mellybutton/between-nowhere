@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState, type FormEvent } from "react";
-import { motion } from "framer-motion";
+
 import { ArrowLeft, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
@@ -97,11 +97,7 @@ function AuthPage() {
       </Link>
 
       <div className="relative z-10 mx-auto flex min-h-screen max-w-md flex-col justify-center px-6">
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
+        <div>
           <h1 className="font-narrative text-4xl leading-tight text-foreground">
             {mode === "signup" ? "Find your frequency." : "Welcome back."}
           </h1>
@@ -110,15 +106,9 @@ function AuthPage() {
               ? "Create an account so your progress travels with you."
               : "Sign in to continue where you left off."}
           </p>
-        </motion.div>
+        </div>
 
-        <motion.form
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          onSubmit={handleEmailSubmit}
-          className="mt-8 space-y-3"
-        >
+        <form onSubmit={handleEmailSubmit} className="mt-8 space-y-3">
           <div className="space-y-1.5">
             <label
               htmlFor="email"
@@ -173,7 +163,7 @@ function AuthPage() {
             {submitting && <Loader2 className="h-4 w-4 animate-spin" />}
             {mode === "signup" ? "Create account" : "Sign in"}
           </button>
-        </motion.form>
+        </form>
 
         <div className="my-6 flex items-center gap-3">
           <div className="h-px flex-1 bg-border" />
