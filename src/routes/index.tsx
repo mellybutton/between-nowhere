@@ -1,4 +1,4 @@
-import { createFileRoute, Link, redirect } from "@tanstack/react-router";
+import { createFileRoute, Link, redirect, useNavigate } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import {
   CheckCircle2,
@@ -12,6 +12,7 @@ import {
 import { StarField } from "@/components/illustrations/StarField";
 import { SignalWaves } from "@/components/illustrations/SignalWaves";
 import { AmbientParticles } from "@/components/illustrations/AmbientParticles";
+import { enterGuestMode } from "@/lib/guest-mode";
 import heroBg from "@/assets/hero-night.webp";
 
 export const Route = createFileRoute("/")({
