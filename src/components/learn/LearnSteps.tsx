@@ -129,7 +129,7 @@ export function TransitionStep({
       transition={{ duration: 0.8 }}
       className="flex flex-1 flex-col"
     >
-      <div className="pt-2">
+      <div className="pt-8 sm:pt-12">
         <p className="font-narrative text-xl italic leading-relaxed text-foreground/85 sm:text-[26px]">
           {text}
         </p>
