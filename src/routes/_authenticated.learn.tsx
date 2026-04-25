@@ -109,10 +109,10 @@ function LearnPage() {
     <div className="relative min-h-screen overflow-hidden bg-background">
       {/* Atmospheric background */}
       <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-55"
+        className="absolute inset-0 bg-cover bg-top bg-no-repeat opacity-90"
         style={{ backgroundImage: `url(${heroBg})` }}
       />
-      <div className="absolute inset-0 bg-gradient-to-b from-background/35 via-background/55 to-background/85" />
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/25 to-background/85" />
       <StarField density={15} />
       <AmbientParticles count={10} />
 

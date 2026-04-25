@@ -23,11 +23,11 @@ function IntroPage() {
     <div className="relative min-h-screen overflow-hidden bg-background">
       {/* Background image */}
       <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-60"
+        className="absolute inset-0 bg-cover bg-top bg-no-repeat opacity-90"
         style={{ backgroundImage: `url(${heroBg})` }}
       />
-      {/* Atmospheric overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/55 to-background/85" />
+      {/* Atmospheric overlay — keep image visible, darken only the bottom for text legibility */}
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/20 to-background/80" />
 
       <SignalWaves />
       <StarField density={20} />
