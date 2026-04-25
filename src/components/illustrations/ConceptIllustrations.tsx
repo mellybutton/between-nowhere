@@ -299,9 +299,33 @@ const ALIASES: Record<string, keyof typeof CANONICAL> = {
 
   // Weather
   weather_effects: "weather_effects",
+  weather_alert: "weather_alert",
+  noaa: "weather_alert",
+  noaa_alert: "weather_alert",
+  skywarn: "weather_alert",
+  weather_net: "weather_alert",
 
   // Digital beacons
   aprs: "aprs",
+
+  // Station setup — dummy load for testing without radiating
+  dummy_load: "dummy_load",
+  dummyload: "dummy_load",
+  test_load: "dummy_load",
+
+  // Tuning / resonance / antenna tuner
+  tuning: "tuning_resonance",
+  tuning_resonance: "tuning_resonance",
+  resonance: "tuning_resonance",
+  antenna_tuner: "tuning_resonance",
+  tuner: "tuning_resonance",
+  resonant_frequency: "tuning_resonance",
+
+  // Oscillation / feedback / unwanted self-oscillation
+  oscillation: "oscillation",
+  feedback: "oscillation",
+  oscillator: "oscillation",
+  self_oscillation: "oscillation",
 };
 
 function resolveIllustration(conceptId: string): ComponentType {
