@@ -29,8 +29,7 @@ function HomePage() {
   const pendingHref = useRouterState({
     select: (s) => {
       if (!s.isLoading && !s.isTransitioning) return null;
-      const matches = s.pendingMatches ?? s.matches;
-      return matches[matches.length - 1]?.pathname ?? null;
+      return s.matches[s.matches.length - 1]?.pathname ?? null;
     },
   });
 
