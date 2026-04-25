@@ -14,18 +14,28 @@ export const Route = createFileRoute("/_authenticated/home")({
 });
 
 function HomePage() {
+  const guest = isGuest();
   const { data: rows } = useConceptProgress();
-  const stats = deriveProgressStats(rows);
-  const momentum = useMomentum();
+  const realStats = deriveProgressStats(rows);
+  const realMomentum = useMomentum();
+  // In guest mode, show a clean zero-state — never surface another user's
+  // cached data, never imply progress is being saved.
+  const stats = guest
+    ? { ...realStats, completed: 0, remaining: realStats.total, percent: 0 }
+    : realStats;
+  const momentum = guest
+    ? { ...realMomentum, streak: 0, daysSinceLast: null, lastAttempt: null }
+    : realMomentum;
   const minutes = Math.max(1, Math.round(stats.remaining * 0.25));
   const isFresh = stats.completed === 0;
   const isComplete = stats.completed > 0 && stats.remaining === 0;
-  const guest = isGuest();
-  const returning = returningCopy({
-    daysSinceLast: momentum.daysSinceLast,
-    completed: stats.completed,
-  });
-  const streakLabel = streakBadge(momentum.streak);
+  const returning = guest
+    ? null
+    : returningCopy({
+        daysSinceLast: momentum.daysSinceLast,
+        completed: stats.completed,
+      });
+  const streakLabel = guest ? null : streakBadge(momentum.streak);
 
   // Track in-flight navigation so cards can show a loading state
   const pendingHref = useRouterState({
