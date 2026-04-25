@@ -16,6 +16,14 @@ import heroBg from "@/assets/hero-night.webp";
 
 export const Route = createFileRoute("/")({
   beforeLoad: async () => {
+    // Only load Supabase if there's a chance of an active session.
+    // This keeps the auth SDK out of the critical bundle for first-time visitors.
+    if (typeof window === "undefined") return;
+    const hasAuthToken = Object.keys(window.localStorage).some((k) =>
+      k.startsWith("sb-") && k.endsWith("-auth-token"),
+    );
+    if (!hasAuthToken) return;
+    const { supabase } = await import("@/integrations/supabase/client");
     const {
       data: { session },
     } = await supabase.auth.getSession();
