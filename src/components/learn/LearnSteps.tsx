@@ -54,7 +54,7 @@ export function StatementStep({
       transition={{ duration: 0.6 }}
       className="flex flex-1 flex-col"
     >
-      <div className="pt-2">
+      <div className="pt-6 sm:pt-8">
         <h2 className="font-narrative text-[28px] leading-[1.15] text-foreground sm:text-4xl">
           {text}
         </h2>
