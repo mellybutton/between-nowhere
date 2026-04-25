@@ -267,13 +267,17 @@ export function RevealStep({
   percent,
   isFirstTry,
   loading,
+  streak,
 }: {
   concept: LearnConcept;
   onContinue: () => void;
   percent: number;
   isFirstTry: boolean;
   loading: boolean;
+  streak: number;
 }) {
+  const voice = correctAnswerCopy({ isFirstTry, streak });
+  const isMomentum = streak >= 3;
   return (
     <motion.div
       initial={{ opacity: 0, y: 12 }}
@@ -282,11 +286,34 @@ export function RevealStep({
       transition={{ duration: 0.5 }}
       className="flex flex-1 flex-col"
     >
-      <div className="rounded-2xl border border-success/40 bg-success/10 px-5 py-5">
-        <h2 className="font-narrative text-3xl leading-tight text-success">
-          {isFirstTry ? concept.headlineCorrect : "Got there."}
-        </h2>
-      </div>
+      <motion.div
+        initial={{ opacity: 0, scale: 0.96 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+        className="rounded-2xl border border-success/40 bg-success/10 px-5 py-5"
+      >
+        <div className="flex items-start justify-between gap-3">
+          <h2 className="font-narrative text-3xl leading-tight text-success">
+            {isFirstTry ? voice.headline : voice.headline}
+          </h2>
+          {isMomentum && (
+            <motion.span
+              initial={{ opacity: 0, scale: 0.7 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
+              className="flex shrink-0 items-center gap-1 rounded-full border border-success/40 bg-success/15 px-2.5 py-1 font-interface text-[11px] font-medium text-success"
+            >
+              <Sparkles className="h-3 w-3" strokeWidth={2.25} />
+              {streak}× clean
+            </motion.span>
+          )}
+        </div>
+        {voice.body && (
+          <p className="mt-2 font-interface text-sm leading-relaxed text-success/85">
+            {voice.body}
+          </p>
+        )}
+      </motion.div>
 
       <div className="mt-4 rounded-2xl border border-border/40 bg-card/40 px-5 py-4">
         <p className="flex items-center gap-2 font-interface text-xs uppercase tracking-wider text-muted-foreground">
@@ -321,7 +348,7 @@ export function RevealStep({
       >
         Continue
       </button>
-      <SignalFooter percent={percent} />
+      <SignalFooter percent={percent} streak={streak} />
     </motion.div>
   );
 }
