@@ -52,16 +52,38 @@ function LearnPage() {
   const [wasCorrectFirstTry, setWasCorrectFirstTry] = useState<boolean | null>(
     null,
   );
+  const [wrongAttempts, setWrongAttempts] = useState(0);
+  const [sessionStreak, setSessionStreak] = useState(0);
+
+  // Long-running streak: completed concepts where first try was correct, in order.
+  const baseStreak = useMemo(() => {
+    const completed = (rows ?? [])
+      .filter((r) => r.status === "completed")
+      .sort((a, b) => {
+        const at = a.completed_at ?? "";
+        const bt = b.completed_at ?? "";
+        return bt.localeCompare(at);
+      });
+    let n = 0;
+    for (const r of completed) {
+      if (r.was_correct_first_try) n += 1;
+      else break;
+    }
+    return n;
+  }, [rows]);
+
+  const currentStreak = baseStreak + sessionStreak;
 
   if (!concept) {
     return (
       <div className="mx-auto flex min-h-[80vh] w-full max-w-md flex-col items-center justify-center px-6 text-center">
         <p className="text-5xl">🛰️</p>
         <h1 className="mt-5 font-narrative text-3xl text-foreground">
-          You've reached every signal.
+          Every signal received.
         </h1>
-        <p className="mt-3 max-w-xs font-interface text-sm text-muted-foreground">
-          Time to test what you know.
+        <p className="mt-3 max-w-xs font-interface text-sm leading-relaxed text-muted-foreground">
+          Practice exams from here — that's the only thing left between you and
+          the test.
         </p>
         <Link
           to="/practice"
@@ -78,6 +100,7 @@ function LearnPage() {
     setSelected(null);
     setShowHint(false);
     setWasCorrectFirstTry(null);
+    setWrongAttempts(0);
   }
 
   function submitAnswer() {
@@ -89,6 +112,7 @@ function LearnPage() {
     if (correct) {
       setPhase("reveal");
     } else {
+      setWrongAttempts((n) => n + 1);
       setTimeout(() => setSelected(null), 600);
     }
   }
