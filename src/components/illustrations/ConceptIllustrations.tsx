@@ -84,8 +84,19 @@ const CANONICAL: Record<string, ComponentType> = {
   polarization: PolarizationMatch,
   squelch: SquelchThreshold,
   microphone_gain: MicrophoneGain,
-  voltage_current: VoltageCurrentFlow,
+  electrical_flow: VoltageCurrentFlow,
   breakers_fuses: BreakerFuseProtection,
+  // Batch 4 — electronics fundamentals + RF safety
+  ohms_law: OhmsLawTriangle,
+  capacitance: CapacitanceStorage,
+  inductance: InductanceMagneticField,
+  circuit_schematic: CircuitSchematic,
+  diode: DiodeOneWayFlow,
+  transistor: TransistorSwitch,
+  relay: RelaySwitch,
+  voltage_regulation: VoltageRegulator,
+  transformer: TransformerCoupling,
+  rf_exposure: RFExposureBoundary,
 };
 
 // Aliases — match real concept ids / categories / tags from the dataset to
