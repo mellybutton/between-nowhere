@@ -152,6 +152,17 @@ function IntroPage() {
             <p className="font-interface text-[12px] text-muted-foreground/80">
               No credit card · ~10 minutes to your first concept
             </p>
+
+            <button
+              type="button"
+              onClick={() => {
+                enterGuestMode();
+                navigate({ to: "/home" });
+              }}
+              className="font-interface text-[12px] text-muted-foreground/85 underline decoration-dotted underline-offset-4 transition-colors hover:text-foreground"
+            >
+              Or continue as guest — no sign-in, no progress saved
+            </button>
           </motion.div>
 
           {/* Trust micro-row */}
