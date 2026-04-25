@@ -20,13 +20,13 @@ export function SignalFooter({
   streak?: number;
 }) {
   return (
-    <div className="mt-auto flex items-center justify-center gap-3 pb-6 pt-6">
-      <p className="text-center font-interface text-sm text-muted-foreground">
+    <div className="mt-6 flex items-center justify-center gap-3 pb-2 pt-2">
+      <p className="text-center font-interface text-xs text-muted-foreground">
         Signal strength{" "}
         <span className="font-medium text-primary-accent">{percent}%</span>
       </p>
       {streak !== undefined && streak >= 2 && (
-        <span className="flex items-center gap-1 rounded-full border border-primary-accent/30 bg-primary/10 px-2.5 py-1 font-interface text-[11px] text-primary-accent">
+        <span className="flex items-center gap-1 rounded-full border border-primary-accent/30 bg-primary/10 px-2 py-0.5 font-interface text-[10px] text-primary-accent">
           <Flame className="h-3 w-3" strokeWidth={2} />
           {streak} streak
         </span>
