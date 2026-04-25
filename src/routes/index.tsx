@@ -59,6 +59,7 @@ export const Route = createFileRoute("/")({
 });
 
 function IntroPage() {
+  const navigate = useNavigate();
   return (
     <div className="relative min-h-screen overflow-x-hidden bg-background">
       {/* Hero — viewport height */}
