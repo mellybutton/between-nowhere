@@ -127,15 +127,15 @@ export function TransitionStep({
       transition={{ duration: 0.8 }}
       className="flex flex-1 flex-col"
     >
-      <div className="flex flex-1 items-center justify-center">
-        <p className="font-narrative text-2xl italic leading-relaxed text-foreground/85 sm:text-[26px]">
+      <div className="pt-2">
+        <p className="font-narrative text-xl italic leading-relaxed text-foreground/85 sm:text-[26px]">
           {text}
         </p>
       </div>
       <button
         type="button"
         onClick={onContinue}
-        className="mx-auto mt-8 inline-flex h-14 items-center justify-center gap-2 rounded-full bg-primary px-10 text-base font-medium text-primary-foreground"
+        className="mx-auto mt-6 inline-flex h-14 items-center justify-center gap-2 rounded-full bg-primary px-10 text-base font-medium text-primary-foreground"
       >
         Next concept <ArrowRight className="h-4 w-4" />
       </button>
