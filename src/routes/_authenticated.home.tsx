@@ -229,6 +229,25 @@ function HomePage() {
           </Link>
         </motion.div>
 
+        {guest && (
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+            className="mt-5 flex flex-wrap items-center justify-between gap-2 rounded-full border border-border/40 bg-card/30 px-4 py-2 backdrop-blur-sm"
+          >
+            <span className="font-interface text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+              Guest mode · progress isn't saved
+            </span>
+            <Link
+              to="/auth"
+              className="font-interface text-[11px] uppercase tracking-[0.16em] text-primary-accent transition-opacity hover:opacity-80"
+            >
+              Save progress →
+            </Link>
+          </motion.div>
+        )}
+
         <p className="mt-10 text-center font-interface text-xs italic text-muted-foreground/60">
           {stats.remaining > 0
             ? `About ${minutes} minutes to complete all concepts`
