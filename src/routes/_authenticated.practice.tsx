@@ -9,6 +9,11 @@ import {
   Radio,
 } from "lucide-react";
 import { buildPracticeExam, type Question, categoryMap } from "@/lib/questions";
+import {
+  buildShuffledAnswers,
+  type DisplayAnswer,
+  isDev,
+} from "@/lib/answers";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import {
