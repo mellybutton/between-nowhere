@@ -120,14 +120,14 @@
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family:
-      "Satoshi", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
-      sans-serif;
+      "Plus Jakarta Sans", "Inter", -apple-system, BlinkMacSystemFont,
+      "Segoe UI", sans-serif;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
   }
 
   .font-narrative {
-    font-family: "Recoleta", "Cormorant Garamond", "Playfair Display", Georgia,
+    font-family: "Fraunces", "Cormorant Garamond", "Playfair Display", Georgia,
       serif;
     font-variant-ligatures: none;
     font-weight: 500;
@@ -136,8 +136,8 @@
 
   .font-interface {
     font-family:
-      "Satoshi", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
-      sans-serif;
+      "Plus Jakarta Sans", "Inter", -apple-system, BlinkMacSystemFont,
+      "Segoe UI", sans-serif;
   }
 
   .font-mono-numeric {
