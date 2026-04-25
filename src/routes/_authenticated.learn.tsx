@@ -200,6 +200,7 @@ function LearnPage() {
             <QuestionStep
               key="question"
               concept={concept}
+              displayAnswers={displayAnswers}
               selected={selected}
               setSelected={setSelected}
               showHint={showHint}
