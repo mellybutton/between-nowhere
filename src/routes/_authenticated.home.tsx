@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { createFileRoute, Link, useRouterState } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, Flame, Loader2, X, Bookmark } from "lucide-react";
