@@ -32,6 +32,17 @@ import { RefractionBend } from "./concepts/RefractionBend";
 import { SquelchThreshold } from "./concepts/SquelchThreshold";
 import { VHFvsUHFBehavior } from "./concepts/VHFvsUHFBehavior";
 import { VoltageCurrentFlow } from "./concepts/VoltageCurrentFlow";
+// Batch 4 — electronics, components, RF safety
+import { OhmsLawTriangle } from "./concepts/OhmsLawTriangle";
+import { CapacitanceStorage } from "./concepts/CapacitanceStorage";
+import { InductanceMagneticField } from "./concepts/InductanceMagneticField";
+import { CircuitSchematic } from "./concepts/CircuitSchematic";
+import { DiodeOneWayFlow } from "./concepts/DiodeOneWayFlow";
+import { TransistorSwitch } from "./concepts/TransistorSwitch";
+import { RelaySwitch } from "./concepts/RelaySwitch";
+import { VoltageRegulator } from "./concepts/VoltageRegulator";
+import { TransformerCoupling } from "./concepts/TransformerCoupling";
+import { RFExposureBoundary } from "./concepts/RFExposureBoundary";
 
 /**
  * Animated concept illustrations. Rendered as a floating element in the
