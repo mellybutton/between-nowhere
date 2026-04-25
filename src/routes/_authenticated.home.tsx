@@ -20,6 +20,7 @@ function HomePage() {
   const minutes = Math.max(1, Math.round(stats.remaining * 0.25));
   const isFresh = stats.completed === 0;
   const isComplete = stats.completed > 0 && stats.remaining === 0;
+  const guest = isGuest();
   const returning = returningCopy({
     daysSinceLast: momentum.daysSinceLast,
     completed: stats.completed,
