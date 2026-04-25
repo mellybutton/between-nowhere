@@ -18,7 +18,7 @@ import {
   RevealStep,
   TransitionStep,
 } from "@/components/learn/LearnSteps";
-import heroBg from "@/assets/hero-night.png";
+import heroBg from "@/assets/hero-night.webp";
 
 export const Route = createFileRoute("/_authenticated/learn")({
   component: LearnPage,

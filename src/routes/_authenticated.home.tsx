@@ -6,7 +6,7 @@ import { useMomentum } from "@/lib/momentum";
 import { returningCopy, emptyStates, streakBadge } from "@/lib/feedback-voice";
 import { StarField } from "@/components/illustrations/StarField";
 import { AmbientParticles } from "@/components/illustrations/AmbientParticles";
-import heroBg from "@/assets/hero-night.png";
+import heroBg from "@/assets/hero-night.webp";
 
 export const Route = createFileRoute("/_authenticated/home")({
   component: HomePage,
