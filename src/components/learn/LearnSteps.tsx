@@ -91,7 +91,7 @@ export function InsightStep({
       transition={{ duration: 0.6 }}
       className="flex flex-1 flex-col"
     >
-      <div className="flex flex-col">
+      <div className="flex flex-col pt-4 sm:pt-6">
         {showIllo && <ConceptIllustration conceptId={conceptId} />}
         <p className="font-interface text-[11px] uppercase tracking-[0.18em] text-primary-accent">
           Why this matters
