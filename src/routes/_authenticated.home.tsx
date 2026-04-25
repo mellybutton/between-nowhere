@@ -27,10 +27,11 @@ function HomePage() {
 
   // Track in-flight navigation so cards can show a loading state
   const pendingHref = useRouterState({
-    select: (s) =>
-      s.isLoading || s.isTransitioning
-        ? s.pendingMatches?.[s.pendingMatches.length - 1]?.pathname ?? null
-        : null,
+    select: (s) => {
+      if (!s.isLoading && !s.isTransitioning) return null;
+      const matches = s.pendingMatches ?? s.matches;
+      return matches[matches.length - 1]?.pathname ?? null;
+    },
   });
 
   return (
