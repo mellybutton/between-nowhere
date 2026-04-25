@@ -36,6 +36,15 @@ export const Route = createFileRoute("/")({
     links: [
       // Preload the hero background so FCP/LCP paint as soon as possible
       { rel: "preload", as: "image", href: heroBg, type: "image/webp", fetchpriority: "high" },
+      // Preload the Fraunces weight used by the H1 (LCP element) so text paints without waiting on CSS chain
+      {
+        rel: "preload",
+        as: "font",
+        href: "https://fonts.gstatic.com/s/fraunces/v38/6NU78FyLNQOQZAnv9bYEvDiIdE9Ea92uemAk_WBq8U_9v0c2Wa0KxC9TeP2Xz5c.woff2",
+        type: "font/woff2",
+        crossOrigin: "anonymous",
+        fetchpriority: "high",
+      },
     ],
   }),
 });
@@ -96,16 +105,13 @@ function IntroPage() {
               </span>
             </motion.div>
 
-            <motion.h1
-              initial={{ opacity: 0, scale: 0.96 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.55, duration: 1 }}
+            <h1
               className="font-narrative text-[44px] leading-[1.05] text-foreground sm:text-6xl"
             >
               Pass your
               <br />
               <span className="text-primary-accent">ham radio</span> exam.
-            </motion.h1>
+            </h1>
 
             <motion.p
               initial={{ opacity: 0, y: 10 }}
