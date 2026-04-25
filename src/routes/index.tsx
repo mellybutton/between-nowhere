@@ -21,13 +21,13 @@ export const Route = createFileRoute("/")({
 function IntroPage() {
   return (
     <div className="relative min-h-screen overflow-hidden bg-background">
-      {/* Background image */}
+      {/* Background image — anchored bottom so the foreground stays in view */}
       <div
-        className="absolute inset-0 bg-cover bg-top bg-no-repeat opacity-90"
+        className="absolute inset-0 bg-cover bg-bottom bg-no-repeat opacity-95"
         style={{ backgroundImage: `url(${heroBg})` }}
       />
-      {/* Atmospheric overlay — keep image visible, darken only the bottom for text legibility */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/20 to-background/80" />
+      {/* Subtle top-only vignette for headline legibility — bottom stays clear */}
+      <div className="absolute inset-0 bg-gradient-to-b from-background/60 via-transparent to-transparent" />
 
       <SignalWaves />
       <StarField density={20} />
