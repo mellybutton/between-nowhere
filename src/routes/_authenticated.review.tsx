@@ -4,6 +4,41 @@ import { ArrowRight, LogOut } from "lucide-react";
 import { allQuestions, categoryMap } from "@/lib/questions";
 import { supabase } from "@/integrations/supabase/client";
 import { useConceptProgress, deriveProgressStats } from "@/lib/progress";
+import {
+  usePracticeAnswers,
+  deriveSubelementMastery,
+  type SubelementMastery,
+} from "@/lib/mastery";
+
+const LEVEL_LABEL: Record<SubelementMastery["level"], string> = {
+  "not-started": "Not started",
+  learning: "Learning",
+  familiar: "Familiar",
+  proficient: "Proficient",
+  mastered: "Mastered",
+};
+
+const LEVEL_STYLES: Record<SubelementMastery["level"], string> = {
+  "not-started":
+    "border-border/40 bg-transparent text-muted-foreground/70",
+  learning:
+    "border-amber-400/30 bg-amber-400/10 text-amber-200",
+  familiar:
+    "border-sky-400/30 bg-sky-400/10 text-sky-200",
+  proficient:
+    "border-primary-accent/40 bg-primary-accent/10 text-primary-accent",
+  mastered:
+    "border-emerald-400/40 bg-emerald-400/10 text-emerald-200",
+};
+
+const LEVEL_DOTS = 4;
+const LEVEL_FILLED: Record<SubelementMastery["level"], number> = {
+  "not-started": 0,
+  learning: 1,
+  familiar: 2,
+  proficient: 3,
+  mastered: 4,
+};
 
 export const Route = createFileRoute("/_authenticated/review")({
   component: ReviewPage,
@@ -12,6 +47,11 @@ export const Route = createFileRoute("/_authenticated/review")({
 function ReviewPage() {
   const { data: rows } = useConceptProgress();
   const stats = deriveProgressStats(rows);
+  const { data: attempts } = usePracticeAnswers();
+  const mastery = useMemo(
+    () => deriveSubelementMastery(attempts),
+    [attempts],
+  );
 
   const groups = useMemo(() => {
     const counts: Record<string, number> = {};
@@ -55,32 +95,68 @@ function ReviewPage() {
       </p>
 
       <ul className="mt-8 space-y-3">
-        {groups.map(([sub, count]) => (
-          <li key={sub}>
-            <Link
-              to="/learn"
-              className="group flex items-center justify-between rounded-2xl border border-border/40 bg-card/40 px-5 py-4 transition-colors hover:border-primary-accent/40 hover:bg-card/60"
-            >
-              <div>
-                <p className="font-interface text-[11px] uppercase tracking-wider text-muted-foreground">
-                  {sub}
-                </p>
-                <p className="mt-0.5 font-interface text-[15px] text-foreground">
-                  {categoryMap[sub] ?? sub}
-                </p>
-              </div>
-              <div className="flex items-center gap-3">
-                <span className="font-interface text-sm font-mono-numeric text-muted-foreground">
-                  {count}
-                </span>
-                <ArrowRight
-                  className="h-4 w-4 text-muted-foreground/60 transition-all group-hover:translate-x-0.5 group-hover:text-primary-accent"
-                  strokeWidth={1.75}
-                />
-              </div>
-            </Link>
-          </li>
-        ))}
+        {groups.map(([sub, count]) => {
+          const m =
+            mastery[sub] ??
+            ({
+              subelement: sub,
+              attempted: 0,
+              correct: 0,
+              ratio: 0,
+              level: "not-started",
+            } as SubelementMastery);
+          const filled = LEVEL_FILLED[m.level];
+          return (
+            <li key={sub}>
+              <Link
+                to="/learn"
+                className="group flex items-center justify-between gap-4 rounded-2xl border border-border/40 bg-card/40 px-5 py-4 transition-colors hover:border-primary-accent/40 hover:bg-card/60"
+              >
+                <div className="min-w-0 flex-1">
+                  <p className="font-interface text-[11px] uppercase tracking-wider text-muted-foreground">
+                    {sub}
+                  </p>
+                  <p className="mt-0.5 truncate font-interface text-[15px] text-foreground">
+                    {categoryMap[sub] ?? sub}
+                  </p>
+                  <div className="mt-2 flex items-center gap-2">
+                    <span
+                      className={`inline-flex items-center rounded-full border px-2 py-0.5 font-interface text-[10px] uppercase tracking-wider ${LEVEL_STYLES[m.level]}`}
+                    >
+                      {LEVEL_LABEL[m.level]}
+                    </span>
+                    <div className="flex items-center gap-1" aria-hidden>
+                      {Array.from({ length: LEVEL_DOTS }).map((_, i) => (
+                        <span
+                          key={i}
+                          className={`h-1.5 w-1.5 rounded-full ${
+                            i < filled
+                              ? "bg-primary-accent"
+                              : "bg-muted-foreground/25"
+                          }`}
+                        />
+                      ))}
+                    </div>
+                    {m.attempted > 0 ? (
+                      <span className="font-interface font-mono-numeric text-[11px] text-muted-foreground">
+                        {m.correct}/{m.attempted}
+                      </span>
+                    ) : null}
+                  </div>
+                </div>
+                <div className="flex shrink-0 items-center gap-3">
+                  <span className="font-interface text-sm font-mono-numeric text-muted-foreground">
+                    {count}
+                  </span>
+                  <ArrowRight
+                    className="h-4 w-4 text-muted-foreground/60 transition-all group-hover:translate-x-0.5 group-hover:text-primary-accent"
+                    strokeWidth={1.75}
+                  />
+                </div>
+              </Link>
+            </li>
+          );
+        })}
       </ul>
 
       <Link
