@@ -154,7 +154,7 @@ function IntroPage() {
           <motion.div
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.5, duration: 0.7 }}
+            transition={{ delay: 0.5, duration: 0.6 }}
             className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 font-interface text-[11px] uppercase tracking-[0.16em] text-muted-foreground/85"
           >
             <span className="flex items-center gap-1.5">
@@ -164,7 +164,7 @@ function IntroPage() {
             <span className="hidden h-3 w-px bg-border sm:inline-block" />
             <span className="flex items-center gap-1.5">
               <CheckCircle2 className="h-3 w-3 text-success" strokeWidth={2.25} />
-              Progress saved
+              Free forever
             </span>
             <span className="hidden h-3 w-px bg-border sm:inline-block" />
             <span className="flex items-center gap-1.5">
@@ -178,7 +178,7 @@ function IntroPage() {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 1.8, duration: 1 }}
+          transition={{ delay: 0.7, duration: 0.8 }}
           className="relative z-10 pb-6 text-center"
         >
           <p className="font-interface text-[11px] uppercase tracking-[0.2em] text-muted-foreground/60">
