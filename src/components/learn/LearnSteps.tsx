@@ -1,18 +1,36 @@
-import { motion } from "framer-motion";
-import { ArrowRight, Lightbulb, Check } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowRight, Lightbulb, Check, Flame, Sparkles } from "lucide-react";
 import { acronymExpansions } from "@/lib/acronyms";
 import type { LearnConcept } from "@/data/learnFlow";
 import {
   ConceptIllustration,
   hasIllustration,
 } from "@/components/illustrations/ConceptIllustrations";
+import {
+  correctAnswerCopy,
+  wrongAttemptCopy,
+} from "@/lib/feedback-voice";
 
-export function SignalFooter({ percent }: { percent: number }) {
+export function SignalFooter({
+  percent,
+  streak,
+}: {
+  percent: number;
+  streak?: number;
+}) {
   return (
-    <p className="mt-auto pb-6 pt-6 text-center font-interface text-sm text-muted-foreground">
-      Signal strength{" "}
-      <span className="font-medium text-primary-accent">{percent}%</span>
-    </p>
+    <div className="mt-auto flex items-center justify-center gap-3 pb-6 pt-6">
+      <p className="text-center font-interface text-sm text-muted-foreground">
+        Signal strength{" "}
+        <span className="font-medium text-primary-accent">{percent}%</span>
+      </p>
+      {streak !== undefined && streak >= 2 && (
+        <span className="flex items-center gap-1 rounded-full border border-primary-accent/30 bg-primary/10 px-2.5 py-1 font-interface text-[11px] text-primary-accent">
+          <Flame className="h-3 w-3" strokeWidth={2} />
+          {streak} streak
+        </span>
+      )}
+    </div>
   );
 }
 
