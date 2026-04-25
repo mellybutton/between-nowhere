@@ -12,7 +12,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { StarField } from "@/components/illustrations/StarField";
 import { SignalWaves } from "@/components/illustrations/SignalWaves";
 import { AmbientParticles } from "@/components/illustrations/AmbientParticles";
-import heroBg from "@/assets/hero-night.png";
+import heroBg from "@/assets/hero-night.webp";
 
 export const Route = createFileRoute("/")({
   beforeLoad: async () => {
@@ -32,6 +32,10 @@ export const Route = createFileRoute("/")({
         content:
           "A cinematic, beginner-friendly study companion for the FCC Amateur Radio Technician exam. Full 2026–2030 question pool, progress tracking, and the why behind every signal.",
       },
+    ],
+    links: [
+      // Preload the hero background so FCP/LCP paint as soon as possible
+      { rel: "preload", as: "image", href: heroBg, type: "image/webp", fetchpriority: "high" },
     ],
   }),
 });
