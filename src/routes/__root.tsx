@@ -77,6 +77,9 @@ export const Route = createRootRouteWithContext<RouterContext>()({
         href: "https://fonts.gstatic.com",
         crossOrigin: "anonymous",
       },
+      // DNS pre-resolution for the editor/widget CDN so its assets don't
+      // sit at the head of a long critical chain on first paint.
+      { rel: "dns-prefetch", href: "https://cdn.gpteng.co" },
       {
         rel: "preload",
         as: "font",
