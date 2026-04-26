@@ -329,6 +329,10 @@ export function RevealStep({
       exit={{ opacity: 0, y: -12 }}
       transition={{ duration: 0.5 }}
       className="flex flex-1 flex-col"
+      data-testid="learn-step"
+      data-phase="reveal"
+      data-concept-id={concept.id}
+      data-first-try={isFirstTry ? "true" : "false"}
     >
       <motion.div
         initial={{ opacity: 0, scale: 0.96 }}
@@ -388,6 +392,7 @@ export function RevealStep({
         type="button"
         onClick={onContinue}
         disabled={loading}
+        data-testid="learn-reveal-continue"
         className="mt-4 inline-flex h-14 w-full items-center justify-center gap-2 rounded-full bg-primary text-base font-medium text-primary-foreground disabled:opacity-50"
       >
         Continue
