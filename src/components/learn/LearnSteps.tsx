@@ -41,10 +41,12 @@ export function StatementStep({
   text,
   onContinue,
   percent,
+  conceptId,
 }: {
   text: string;
   onContinue: () => void;
   percent: number;
+  conceptId: string;
 }) {
   return (
     <motion.div
@@ -53,6 +55,9 @@ export function StatementStep({
       exit={{ opacity: 0, y: -12 }}
       transition={{ duration: 0.6 }}
       className="flex flex-1 flex-col items-center justify-center text-center"
+      data-testid="learn-step"
+      data-phase="hook"
+      data-concept-id={conceptId}
     >
       <div className="flex flex-1 flex-col items-center justify-center">
         <h2 className="font-narrative text-[28px] leading-[1.15] text-foreground sm:text-4xl">
@@ -62,6 +67,7 @@ export function StatementStep({
       <button
         type="button"
         onClick={onContinue}
+        data-testid="learn-hook-continue"
         className="mt-8 inline-flex h-14 items-center justify-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-10 text-base font-medium text-foreground backdrop-blur-md transition-colors hover:bg-primary/20"
       >
         Continue <ArrowRight className="h-4 w-4" />
@@ -90,6 +96,9 @@ export function InsightStep({
       exit={{ opacity: 0, y: -12 }}
       transition={{ duration: 0.6 }}
       className="flex flex-1 flex-col"
+      data-testid="learn-step"
+      data-phase="insight"
+      data-concept-id={conceptId}
     >
       {showIllo && <ConceptIllustration conceptId={conceptId} />}
       <div className="flex flex-1 flex-col items-center justify-center text-center">
@@ -103,6 +112,7 @@ export function InsightStep({
       <button
         type="button"
         onClick={onContinue}
+        data-testid="learn-insight-continue"
         className="mx-auto mt-8 inline-flex h-14 items-center justify-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-10 text-base font-medium text-foreground backdrop-blur-md transition-colors hover:bg-primary/20"
       >
         Next <ArrowRight className="h-4 w-4" />
@@ -116,10 +126,12 @@ export function TransitionStep({
   text,
   onContinue,
   percent,
+  conceptId,
 }: {
   text: string;
   onContinue: () => void;
   percent: number;
+  conceptId: string;
 }) {
   return (
     <motion.div
@@ -128,6 +140,9 @@ export function TransitionStep({
       exit={{ opacity: 0 }}
       transition={{ duration: 0.8 }}
       className="flex flex-1 flex-col items-center justify-center text-center"
+      data-testid="learn-step"
+      data-phase="transition"
+      data-concept-id={conceptId}
     >
       <div className="flex flex-1 flex-col items-center justify-center">
         <p className="font-narrative text-xl italic leading-relaxed text-foreground/85 sm:text-[26px]">
@@ -137,6 +152,7 @@ export function TransitionStep({
       <button
         type="button"
         onClick={onContinue}
+        data-testid="learn-next-concept"
         className="mt-8 inline-flex h-14 items-center justify-center gap-2 rounded-full bg-primary px-10 text-base font-medium text-primary-foreground"
       >
         Next concept <ArrowRight className="h-4 w-4" />
