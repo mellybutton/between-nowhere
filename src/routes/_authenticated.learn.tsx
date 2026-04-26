@@ -9,6 +9,7 @@ import {
   deriveProgressStats,
 } from "@/lib/progress";
 import { buildShuffledAnswers, type DisplayAnswer, isDev } from "@/lib/answers";
+import { trackLearnEvent } from "@/lib/learn-events";
 import { StarField } from "@/components/illustrations/StarField";
 import { AmbientParticles } from "@/components/illustrations/AmbientParticles";
 import {
@@ -86,6 +87,40 @@ function LearnPage() {
     }
   }, [concept?.id]);
 
+  // Funnel tracking: fire a *_shown event each time the user lands on a phase
+  // for the current concept. Action events (answer_submitted, concept_completed,
+  // success_dismissed, concept_advanced) fire from their handlers below.
+  useEffect(() => {
+    if (!concept) return;
+    const eventForPhase: Partial<Record<Phase, "hook_shown" | "insight_shown" | "question_shown">> = {
+      hook: "hook_shown",
+      insight: "insight_shown",
+      question: "question_shown",
+    };
+    const evt = eventForPhase[phase];
+    if (!evt) return;
+    void trackLearnEvent({
+      event: evt,
+      conceptId: concept.id,
+      stage: concept.stage,
+    });
+  }, [phase, concept?.id]);
+
+  // Fire flow_completed once when the user reaches the "all done" screen.
+  // Guarded by activeConcept === null + completed rows so this never fires
+  // on initial mount before data has loaded.
+  const completedCount = (rows ?? []).filter(
+    (r) => r.status === "completed",
+  ).length;
+  const flowComplete =
+    activeConcept === null &&
+    completedCount >= learnFlowConcepts.length &&
+    rows !== undefined;
+  useEffect(() => {
+    if (!flowComplete) return;
+    void trackLearnEvent({ event: "flow_completed" });
+  }, [flowComplete]);
+
   // Long-running streak: completed concepts where first try was correct, in order.
   const baseStreak = useMemo(() => {
     const completed = (rows ?? [])
@@ -138,6 +173,16 @@ function LearnPage() {
     if (selected === null) return;
     // Evaluate against isCorrect on the displayed answer — never positional.
     const correct = displayAnswers[selected]?.isCorrect === true;
+    void trackLearnEvent({
+      event: "answer_submitted",
+      conceptId: concept!.id,
+      stage: concept!.stage,
+      metadata: {
+        correct,
+        attempt: wrongAttempts + 1,
+        first_try_evaluated: wasCorrectFirstTry === null,
+      },
+    });
     if (wasCorrectFirstTry === null) {
       setWasCorrectFirstTry(correct);
     }
@@ -155,6 +200,16 @@ function LearnPage() {
       conceptId: concept!.id,
       wasCorrectFirstTry: firstTry,
     });
+    void trackLearnEvent({
+      event: "concept_completed",
+      conceptId: concept!.id,
+      stage: concept!.stage,
+      metadata: {
+        first_try: firstTry,
+        wrong_attempts: wrongAttempts,
+        used_hint: showHint,
+      },
+    });
     if (firstTry) {
       setSessionStreak((n) => n + 1);
     } else {
@@ -165,6 +220,20 @@ function LearnPage() {
   }
 
   function next() {
+    void trackLearnEvent({
+      event: "concept_advanced",
+      conceptId: concept!.id,
+      stage: concept!.stage,
+    });
+    // Also fire success_dismissed — these are conceptually distinct: one is
+    // "user closed the success screen", the other is "user moved on". For
+    // now they coincide because the transition screen has only one action,
+    // but keeping both lets us split them later if we add a "review" path.
+    void trackLearnEvent({
+      event: "success_dismissed",
+      conceptId: concept!.id,
+      stage: concept!.stage,
+    });
     // Clear the pinned concept so the effect adopts the next derived one.
     // If there is no next concept, the early-return below renders the
     // "Every signal received" completion screen.
@@ -228,7 +297,16 @@ function LearnPage() {
               selected={selected}
               setSelected={setSelected}
               showHint={showHint}
-              setShowHint={setShowHint}
+              setShowHint={(v) => {
+                if (v && !showHint) {
+                  void trackLearnEvent({
+                    event: "hint_revealed",
+                    conceptId: concept.id,
+                    stage: concept.stage,
+                  });
+                }
+                setShowHint(v);
+              }}
               onSubmit={submitAnswer}
               percent={stats.percent}
               wrongAttempts={wrongAttempts}
