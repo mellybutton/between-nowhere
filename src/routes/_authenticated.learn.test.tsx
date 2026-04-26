@@ -160,7 +160,7 @@ async function renderLearnPage() {
   const learnRoute = createRoute({
     getParentRoute: () => rootRoute,
     path: "/learn",
-    component: LearnComponent as React.ComponentType,
+    component: LearnComponent as never,
   });
   const homeRoute = createRoute({
     getParentRoute: () => rootRoute,
