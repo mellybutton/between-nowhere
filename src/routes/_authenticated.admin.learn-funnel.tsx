@@ -167,6 +167,74 @@ function LearnFunnelPage() {
     });
   }, [events]);
 
+  // Per-user "stuck" detector: users who fired concept_completed for a
+  // concept but never fired concept_advanced after it. Surfaces both:
+  //   - users completing the same concept repeatedly without moving on
+  //   - users who hit a wall on a specific concept and abandoned
+  const stuckUsers = useMemo(() => {
+    if (!events) return [];
+    // Events come back ordered DESC; flip to ASC for sequential walking.
+    const asc = [...events].sort(
+      (a, b) =>
+        new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
+    );
+    type StuckRow = {
+      userId: string;
+      conceptId: string;
+      stage: string | null;
+      completions: number;
+      wrongAttempts: number;
+      lastSeen: string;
+    };
+    // Key: userId|conceptId. We track running counts and clear when an
+    // advance occurs after the most recent completion.
+    const open = new Map<string, StuckRow>();
+    const finalised: StuckRow[] = [];
+
+    for (const e of asc) {
+      if (!e.concept_id) continue;
+      const key = `${e.user_id}|${e.concept_id}`;
+      if (e.event_name === "concept_completed") {
+        const row = open.get(key) ?? {
+          userId: e.user_id,
+          conceptId: e.concept_id,
+          stage: e.stage,
+          completions: 0,
+          wrongAttempts: 0,
+          lastSeen: e.created_at,
+        };
+        row.completions += 1;
+        row.lastSeen = e.created_at;
+        open.set(key, row);
+      } else if (e.event_name === "answer_submitted") {
+        const correct = (e.metadata as { correct?: boolean })?.correct;
+        if (correct === false) {
+          const row = open.get(key);
+          if (row) {
+            row.wrongAttempts += 1;
+            row.lastSeen = e.created_at;
+          }
+        }
+      } else if (e.event_name === "concept_advanced") {
+        // User moved on — they're no longer stuck on this concept.
+        open.delete(key);
+      }
+    }
+    for (const row of open.values()) finalised.push(row);
+
+    // Sort: repeat-completers first (strongest stuck signal), then by recency.
+    return finalised
+      .filter((r) => r.completions >= 1)
+      .sort((a, b) => {
+        if (b.completions !== a.completions)
+          return b.completions - a.completions;
+        return (
+          new Date(b.lastSeen).getTime() - new Date(a.lastSeen).getTime()
+        );
+      })
+      .slice(0, 50);
+  }, [events]);
+
   if (roleLoading) {
     return (
       <div className="flex min-h-[60vh] items-center justify-center">
@@ -337,6 +405,83 @@ function LearnFunnelPage() {
               {perConcept.every((c) => c.reached === 0) && (
                 <p className="mt-2 font-interface text-sm text-muted-foreground">
                   No concept activity in this window yet.
+                </p>
+              )}
+            </div>
+          </section>
+
+          <section className="mt-6 rounded-2xl border border-border/60 bg-card/40 p-5">
+            <h2 className="font-interface text-xs uppercase tracking-wider text-muted-foreground">
+              Stuck users
+            </h2>
+            <p className="mt-1 font-interface text-xs text-muted-foreground">
+              Users who completed a concept but never advanced from it.
+              Repeat completions on the same concept (≥2) are the strongest
+              signal — likely re-running the same step instead of moving on.
+            </p>
+            <div className="mt-3 overflow-x-auto">
+              <table className="w-full font-interface text-sm">
+                <thead>
+                  <tr className="text-left text-xs uppercase tracking-wider text-muted-foreground">
+                    <th className="py-2">User</th>
+                    <th className="py-2">Concept</th>
+                    <th className="py-2 text-right">Completions</th>
+                    <th className="py-2 text-right">Wrong</th>
+                    <th className="py-2 text-right">Last seen</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {stuckUsers.map((row) => {
+                    const repeatBad = row.completions >= 2;
+                    const wrongBad = row.wrongAttempts >= 3;
+                    return (
+                      <tr
+                        key={`${row.userId}-${row.conceptId}`}
+                        className="border-t border-border/40"
+                      >
+                        <td
+                          className="py-2 font-mono text-xs text-muted-foreground"
+                          title={row.userId}
+                        >
+                          {row.userId.slice(0, 8)}…
+                        </td>
+                        <td className="py-2 text-foreground">
+                          <span className="font-mono text-xs">
+                            {row.conceptId}
+                          </span>
+                          {row.stage && (
+                            <span className="ml-2 rounded-full border border-border/60 px-1.5 py-0.5 text-[10px] text-muted-foreground">
+                              {row.stage}
+                            </span>
+                          )}
+                        </td>
+                        <td
+                          className={`py-2 text-right tabular-nums ${repeatBad ? "text-destructive" : "text-foreground"}`}
+                        >
+                          {row.completions}
+                        </td>
+                        <td
+                          className={`py-2 text-right tabular-nums ${wrongBad ? "text-destructive" : "text-muted-foreground"}`}
+                        >
+                          {row.wrongAttempts}
+                        </td>
+                        <td className="py-2 text-right tabular-nums text-muted-foreground">
+                          {new Date(row.lastSeen).toLocaleString(undefined, {
+                            month: "short",
+                            day: "numeric",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+              {stuckUsers.length === 0 && (
+                <p className="mt-2 font-interface text-sm text-muted-foreground">
+                  No stuck users in this window — everyone who completed a
+                  concept advanced past it.
                 </p>
               )}
             </div>
