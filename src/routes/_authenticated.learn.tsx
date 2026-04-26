@@ -87,6 +87,26 @@ function LearnPage() {
     }
   }, [concept?.id]);
 
+  // Funnel tracking: fire a *_shown event each time the user lands on a phase
+  // for the current concept. This drives the dashboard's drop-off analysis.
+  useEffect(() => {
+    if (!concept) return;
+    const eventForPhase = {
+      hook: "hook_shown",
+      insight: "insight_shown",
+      question: "question_shown",
+      reveal: "concept_completed", // user has seen the success screen
+      transition: "success_dismissed",
+    } as const;
+    const evt = eventForPhase[phase];
+    if (!evt) return;
+    void trackLearnEvent({
+      event: evt,
+      conceptId: concept.id,
+      stage: concept.stage,
+    });
+  }, [phase, concept?.id]);
+
   // Long-running streak: completed concepts where first try was correct, in order.
   const baseStreak = useMemo(() => {
     const completed = (rows ?? [])
