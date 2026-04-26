@@ -142,7 +142,10 @@ function LearnPage() {
 
   if (!concept) {
     return (
-      <div className="mx-auto flex min-h-[80vh] w-full max-w-md flex-col items-center justify-center px-6 text-center">
+      <div
+        data-testid="learn-flow-complete"
+        className="mx-auto flex min-h-[80vh] w-full max-w-md flex-col items-center justify-center px-6 text-center"
+      >
         <p className="text-5xl">🛰️</p>
         <h1 className="mt-5 font-narrative text-3xl text-foreground">
           Every signal received.
@@ -153,6 +156,7 @@ function LearnPage() {
         </p>
         <Link
           to="/practice"
+          data-testid="learn-go-practice"
           className="mt-8 inline-flex h-14 w-full items-center justify-center gap-2 rounded-full bg-primary text-base font-medium text-primary-foreground"
         >
           Take a practice exam <ArrowRight className="h-4 w-4" />
@@ -276,6 +280,7 @@ function LearnPage() {
             <StatementStep
               key="hook"
               text={concept.hook}
+              conceptId={concept.id}
               onContinue={() => setPhase("insight")}
               percent={stats.percent}
             />
@@ -328,6 +333,7 @@ function LearnPage() {
             <TransitionStep
               key="transition"
               text={concept.continueText}
+              conceptId={concept.id}
               onContinue={next}
               percent={stats.percent}
             />
