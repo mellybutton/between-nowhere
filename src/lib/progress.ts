@@ -69,8 +69,11 @@ export function useRecordConcept() {
         if (error) throw error;
       }
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["concept_progress"] });
+    onSuccess: async () => {
+      // Return the promise so `mutateAsync` only resolves after the cache
+      // has been refetched. Without this, callers can advance UI state
+      // while `rows` is still stale and re-render the same concept.
+      await queryClient.invalidateQueries({ queryKey: ["concept_progress"] });
     },
   });
 }
