@@ -106,6 +106,21 @@ function LearnPage() {
     });
   }, [phase, concept?.id]);
 
+  // Fire flow_completed once when the user reaches the "all done" screen.
+  // Guarded by activeConcept === null + completed rows so this never fires
+  // on initial mount before data has loaded.
+  const completedCount = (rows ?? []).filter(
+    (r) => r.status === "completed",
+  ).length;
+  const flowComplete =
+    activeConcept === null &&
+    completedCount >= learnFlowConcepts.length &&
+    rows !== undefined;
+  useEffect(() => {
+    if (!flowComplete) return;
+    void trackLearnEvent({ event: "flow_completed" });
+  }, [flowComplete]);
+
   // Long-running streak: completed concepts where first try was correct, in order.
   const baseStreak = useMemo(() => {
     const completed = (rows ?? [])
