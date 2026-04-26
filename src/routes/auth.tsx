@@ -8,6 +8,7 @@ import { useAuth } from "@/lib/auth-context";
 import { enterGuestMode } from "@/lib/guest-mode";
 import { StarField } from "@/components/illustrations/StarField";
 import { AmbientParticles } from "@/components/illustrations/AmbientParticles";
+import heroBg from "@/assets/hero-night.webp";
 
 export const Route = createFileRoute("/auth")({
   component: AuthPage,
@@ -85,6 +86,12 @@ function AuthPage() {
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-background">
+      <div
+        className="absolute inset-0 bg-cover bg-bottom bg-no-repeat opacity-95"
+        style={{ backgroundImage: `url(${heroBg})` }}
+      />
+      <div className="absolute inset-0 bg-gradient-to-b from-background/60 via-transparent to-transparent" />
+      <div className="absolute inset-0 bg-background/60" />
       <StarField density={12} />
       <AmbientParticles count={8} />
 
