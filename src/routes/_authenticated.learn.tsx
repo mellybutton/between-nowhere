@@ -9,6 +9,7 @@ import {
   deriveProgressStats,
 } from "@/lib/progress";
 import { buildShuffledAnswers, type DisplayAnswer, isDev } from "@/lib/answers";
+import { trackLearnEvent } from "@/lib/learn-events";
 import { StarField } from "@/components/illustrations/StarField";
 import { AmbientParticles } from "@/components/illustrations/AmbientParticles";
 import {
