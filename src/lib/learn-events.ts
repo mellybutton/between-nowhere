@@ -55,14 +55,17 @@ export async function trackLearnEvent(input: LearnEventInput): Promise<void> {
     const userId = sessionData.session?.user.id;
     if (!userId) return;
 
-    await supabase.from("learn_events").insert({
-      user_id: userId,
-      session_id: getSessionId(),
-      event_name: input.event,
-      concept_id: input.conceptId ?? null,
-      stage: input.stage ?? null,
-      metadata: input.metadata ?? {},
-    });
+    await supabase
+      .from("learn_events")
+      // Cast: types haven't regenerated yet for the new table.
+      .insert({
+        user_id: userId,
+        session_id: getSessionId(),
+        event_name: input.event,
+        concept_id: input.conceptId ?? null,
+        stage: input.stage ?? null,
+        metadata: (input.metadata ?? {}) as never,
+      } as never);
   } catch {
     // Analytics must never break the UX.
   }
