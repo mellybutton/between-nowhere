@@ -259,7 +259,7 @@ export function QuestionStep({
                 onClick={() => setSelected(i)}
                 data-testid="learn-answer"
                 data-answer-index={i}
-                data-source-index={answer.sourceIndex}
+                data-source-index={answer.originalIndex}
                 data-correct={answer.isCorrect ? "true" : "false"}
                 aria-pressed={isSelected}
                 className={`flex w-full items-start gap-3 rounded-xl border px-3.5 py-3 text-left font-interface text-[14px] leading-snug transition-all ${
