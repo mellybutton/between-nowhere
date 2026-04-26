@@ -167,6 +167,74 @@ function LearnFunnelPage() {
     });
   }, [events]);
 
+  // Per-user "stuck" detector: users who fired concept_completed for a
+  // concept but never fired concept_advanced after it. Surfaces both:
+  //   - users completing the same concept repeatedly without moving on
+  //   - users who hit a wall on a specific concept and abandoned
+  const stuckUsers = useMemo(() => {
+    if (!events) return [];
+    // Events come back ordered DESC; flip to ASC for sequential walking.
+    const asc = [...events].sort(
+      (a, b) =>
+        new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
+    );
+    type StuckRow = {
+      userId: string;
+      conceptId: string;
+      stage: string | null;
+      completions: number;
+      wrongAttempts: number;
+      lastSeen: string;
+    };
+    // Key: userId|conceptId. We track running counts and clear when an
+    // advance occurs after the most recent completion.
+    const open = new Map<string, StuckRow>();
+    const finalised: StuckRow[] = [];
+
+    for (const e of asc) {
+      if (!e.concept_id) continue;
+      const key = `${e.user_id}|${e.concept_id}`;
+      if (e.event_name === "concept_completed") {
+        const row = open.get(key) ?? {
+          userId: e.user_id,
+          conceptId: e.concept_id,
+          stage: e.stage,
+          completions: 0,
+          wrongAttempts: 0,
+          lastSeen: e.created_at,
+        };
+        row.completions += 1;
+        row.lastSeen = e.created_at;
+        open.set(key, row);
+      } else if (e.event_name === "answer_submitted") {
+        const correct = (e.metadata as { correct?: boolean })?.correct;
+        if (correct === false) {
+          const row = open.get(key);
+          if (row) {
+            row.wrongAttempts += 1;
+            row.lastSeen = e.created_at;
+          }
+        }
+      } else if (e.event_name === "concept_advanced") {
+        // User moved on — they're no longer stuck on this concept.
+        open.delete(key);
+      }
+    }
+    for (const row of open.values()) finalised.push(row);
+
+    // Sort: repeat-completers first (strongest stuck signal), then by recency.
+    return finalised
+      .filter((r) => r.completions >= 1)
+      .sort((a, b) => {
+        if (b.completions !== a.completions)
+          return b.completions - a.completions;
+        return (
+          new Date(b.lastSeen).getTime() - new Date(a.lastSeen).getTime()
+        );
+      })
+      .slice(0, 50);
+  }, [events]);
+
   if (roleLoading) {
     return (
       <div className="flex min-h-[60vh] items-center justify-center">
