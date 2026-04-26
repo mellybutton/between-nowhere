@@ -8,6 +8,7 @@ import { useAuth } from "@/lib/auth-context";
 import { enterGuestMode } from "@/lib/guest-mode";
 import { StarField } from "@/components/illustrations/StarField";
 import { AmbientParticles } from "@/components/illustrations/AmbientParticles";
+import heroBg from "@/assets/hero-night.webp";
 
 export const Route = createFileRoute("/auth")({
   component: AuthPage,
