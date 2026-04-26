@@ -88,16 +88,15 @@ function LearnPage() {
   }, [concept?.id]);
 
   // Funnel tracking: fire a *_shown event each time the user lands on a phase
-  // for the current concept. This drives the dashboard's drop-off analysis.
+  // for the current concept. Action events (answer_submitted, concept_completed,
+  // success_dismissed, concept_advanced) fire from their handlers below.
   useEffect(() => {
     if (!concept) return;
-    const eventForPhase = {
+    const eventForPhase: Partial<Record<Phase, "hook_shown" | "insight_shown" | "question_shown">> = {
       hook: "hook_shown",
       insight: "insight_shown",
       question: "question_shown",
-      reveal: "concept_completed", // user has seen the success screen
-      transition: "success_dismissed",
-    } as const;
+    };
     const evt = eventForPhase[phase];
     if (!evt) return;
     void trackLearnEvent({
