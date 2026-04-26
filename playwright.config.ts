@@ -35,6 +35,16 @@ export default defineConfig({
       name: "chromium",
       use: { ...devices["Desktop Chrome"] },
     },
+    {
+      // Mobile viewport project — exercises the Learn flow at iPhone-class
+      // dimensions. The app is designed for iOS-sized screens (~390×660 safe
+      // area), so this is the most realistic environment to validate it in.
+      // Run only the mobile-tagged specs to keep the matrix small:
+      //   bun run e2e --project=mobile-learn
+      name: "mobile-learn",
+      testMatch: /learn-flow\.mobile\.spec\.ts/,
+      use: { ...devices["iPhone 13"] },
+    },
   ],
   // Skip auto-starting the dev server when targeting a deployed URL.
   webServer: process.env.PLAYWRIGHT_BASE_URL
