@@ -64,6 +64,9 @@ async function primeSession(
 }
 
 test.describe("Learn flow @ mobile", () => {
+  // This file is matched by every `mobile-learn-*` Playwright project, so it
+  // runs once per configured mobile viewport (currently iPhone 13 + iPhone SE,
+  // see playwright.config.ts). One spec, multiple devices — no duplication.
   test.skip(!SEED_TOKEN, "TEST_SEED_TOKEN not set — seed endpoint disabled");
 
   test.beforeEach(async ({ request }) => {
