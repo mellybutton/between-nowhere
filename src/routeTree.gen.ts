@@ -16,6 +16,7 @@ import { Route as AuthenticatedReviewRouteImport } from './routes/_authenticated
 import { Route as AuthenticatedPracticeRouteImport } from './routes/_authenticated.practice'
 import { Route as AuthenticatedLearnRouteImport } from './routes/_authenticated.learn'
 import { Route as AuthenticatedHomeRouteImport } from './routes/_authenticated.home'
+import { Route as ApiTestSeedRouteImport } from './routes/api.test.seed'
 import { Route as AuthenticatedAdminLearnFunnelRouteImport } from './routes/_authenticated.admin.learn-funnel'
 
 const AuthRoute = AuthRouteImport.update({
@@ -52,6 +53,11 @@ const AuthenticatedHomeRoute = AuthenticatedHomeRouteImport.update({
   path: '/home',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const ApiTestSeedRoute = ApiTestSeedRouteImport.update({
+  id: '/api/test/seed',
+  path: '/api/test/seed',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedAdminLearnFunnelRoute =
   AuthenticatedAdminLearnFunnelRouteImport.update({
     id: '/admin/learn-funnel',
@@ -67,6 +73,7 @@ export interface FileRoutesByFullPath {
   '/practice': typeof AuthenticatedPracticeRoute
   '/review': typeof AuthenticatedReviewRoute
   '/admin/learn-funnel': typeof AuthenticatedAdminLearnFunnelRoute
+  '/api/test/seed': typeof ApiTestSeedRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -76,6 +83,7 @@ export interface FileRoutesByTo {
   '/practice': typeof AuthenticatedPracticeRoute
   '/review': typeof AuthenticatedReviewRoute
   '/admin/learn-funnel': typeof AuthenticatedAdminLearnFunnelRoute
+  '/api/test/seed': typeof ApiTestSeedRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -87,6 +95,7 @@ export interface FileRoutesById {
   '/_authenticated/practice': typeof AuthenticatedPracticeRoute
   '/_authenticated/review': typeof AuthenticatedReviewRoute
   '/_authenticated/admin/learn-funnel': typeof AuthenticatedAdminLearnFunnelRoute
+  '/api/test/seed': typeof ApiTestSeedRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -98,6 +107,7 @@ export interface FileRouteTypes {
     | '/practice'
     | '/review'
     | '/admin/learn-funnel'
+    | '/api/test/seed'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -107,6 +117,7 @@ export interface FileRouteTypes {
     | '/practice'
     | '/review'
     | '/admin/learn-funnel'
+    | '/api/test/seed'
   id:
     | '__root__'
     | '/'
@@ -117,12 +128,14 @@ export interface FileRouteTypes {
     | '/_authenticated/practice'
     | '/_authenticated/review'
     | '/_authenticated/admin/learn-funnel'
+    | '/api/test/seed'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   AuthRoute: typeof AuthRoute
+  ApiTestSeedRoute: typeof ApiTestSeedRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -176,6 +189,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedHomeRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/api/test/seed': {
+      id: '/api/test/seed'
+      path: '/api/test/seed'
+      fullPath: '/api/test/seed'
+      preLoaderRoute: typeof ApiTestSeedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/admin/learn-funnel': {
       id: '/_authenticated/admin/learn-funnel'
       path: '/admin/learn-funnel'
@@ -210,6 +230,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   AuthRoute: AuthRoute,
+  ApiTestSeedRoute: ApiTestSeedRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
