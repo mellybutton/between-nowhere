@@ -165,6 +165,10 @@ function LearnPage() {
   }
 
   function next() {
+    // Clear the pinned concept so the effect adopts the next derived one.
+    // If there is no next concept, the early-return below renders the
+    // "Every signal received" completion screen.
+    setActiveConcept(null);
     reset();
   }
 
