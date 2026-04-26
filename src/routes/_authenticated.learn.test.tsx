@@ -189,7 +189,7 @@ async function renderLearnPage() {
   );
 
   // Wait for the first render to settle.
-  await screen.findByText(/continue|signal strength/i);
+  await screen.findByRole("button", { name: /continue/i });
   return { router };
 }
 
