@@ -64,6 +64,9 @@ async function primeSession(
 }
 
 test.describe("Learn flow @ mobile", () => {
+  // This file is matched by every `mobile-learn-*` Playwright project, so it
+  // runs once per configured mobile viewport (currently iPhone 13 + iPhone SE,
+  // see playwright.config.ts). One spec, multiple devices — no duplication.
   test.skip(!SEED_TOKEN, "TEST_SEED_TOKEN not set — seed endpoint disabled");
 
   test.beforeEach(async ({ request }) => {
@@ -136,5 +139,41 @@ test.describe("Learn flow @ mobile", () => {
     // We can't read stage from DOM directly, but presence of a step (not the
     // completion screen) is enough to confirm seeding worked.
     await expect(page.locator('[data-testid="learn-flow-complete"]')).toHaveCount(0);
+  });
+
+  test("primary CTAs fit within the viewport on every step", async ({
+    page,
+    request,
+    viewport,
+  }) => {
+    // Mobile-specific guarantee: thumb-reachable CTAs must never be clipped
+    // off-screen. This is most likely to fail on the narrowest device
+    // (iPhone SE, 375×667), but we run it on every mobile project so any
+    // future device added to the matrix is covered automatically.
+    expect(viewport).not.toBeNull();
+    const vh = viewport!.height;
+    const vw = viewport!.width;
+
+    const tokens = await seed(request, { reset: true });
+    await primeSession(page, tokens);
+    await page.goto("/learn");
+
+    async function expectInViewport(testId: string) {
+      const el = page.locator(`[data-testid="${testId}"]`);
+      await expect(el).toBeVisible();
+      const box = await el.boundingBox();
+      expect(box, `${testId} has no bounding box`).not.toBeNull();
+      expect(box!.y + box!.height, `${testId} bottom is below viewport`).toBeLessThanOrEqual(vh);
+      expect(box!.x + box!.width, `${testId} right is past viewport`).toBeLessThanOrEqual(vw);
+      expect(box!.x, `${testId} left is off-screen`).toBeGreaterThanOrEqual(0);
+    }
+
+    await expectInViewport("learn-hook-continue");
+    await page.locator('[data-testid="learn-hook-continue"]').click();
+
+    await expectInViewport("learn-insight-continue");
+    await page.locator('[data-testid="learn-insight-continue"]').click();
+
+    await expectInViewport("learn-submit");
   });
 });

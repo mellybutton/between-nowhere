@@ -38,12 +38,21 @@ export default defineConfig({
     {
       // Mobile viewport project — exercises the Learn flow at iPhone-class
       // dimensions. The app is designed for iOS-sized screens (~390×660 safe
-      // area), so this is the most realistic environment to validate it in.
+      // area), so these are the most realistic environments to validate it in.
       // Run only the mobile-tagged specs to keep the matrix small:
-      //   bun run e2e --project=mobile-learn
-      name: "mobile-learn",
+      //   bun run e2e --project=mobile-learn-iphone-13
+      //   bun run e2e --project=mobile-learn-iphone-se
+      name: "mobile-learn-iphone-13",
       testMatch: /learn-flow\.mobile\.spec\.ts/,
       use: { ...devices["iPhone 13"] },
+    },
+    {
+      // iPhone SE is the narrowest modern iOS viewport (375×667). If layout
+      // breaks anywhere — clipped CTAs, overflowing answer text, off-screen
+      // hint toggle — it surfaces here first.
+      name: "mobile-learn-iphone-se",
+      testMatch: /learn-flow\.mobile\.spec\.ts/,
+      use: { ...devices["iPhone SE"] },
     },
   ],
   // Skip auto-starting the dev server when targeting a deployed URL.

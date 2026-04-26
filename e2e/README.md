@@ -23,16 +23,25 @@ PLAYWRIGHT_BASE_URL=https://project--<id>-dev.lovable.app bun run e2e
 
 - `chromium` — desktop Chrome, default project. Runs every spec except the
   mobile-only ones.
-- `mobile-learn` — iPhone 13 viewport. Only runs `learn-flow.mobile.spec.ts`.
-  This is the realistic surface for the Learn flow since the app is designed
-  for iOS-class screens (~390×660 safe area).
+- `mobile-learn-iphone-13` — iPhone 13 viewport (390×844). Runs
+  `learn-flow.mobile.spec.ts`.
+- `mobile-learn-iphone-se` — iPhone SE viewport (375×667), the narrowest
+  modern iOS device. Runs the same spec — first place layout regressions
+  (clipped CTAs, overflowing answer text) tend to appear.
+
+The Learn flow is iOS-designed (~390×660 safe area), so both mobile projects
+are the realistic surface to validate it.
 
 ```bash
 # Desktop only
 bun run e2e --project=chromium
 
-# Mobile Learn flow only
-bun run e2e --project=mobile-learn
+# A single mobile viewport
+bun run e2e --project=mobile-learn-iphone-13
+bun run e2e --project=mobile-learn-iphone-se
+
+# Both mobile viewports
+bun run e2e --project=mobile-learn-iphone-13 --project=mobile-learn-iphone-se
 ```
 
 The mobile Learn spec needs the test seeding endpoint enabled. Required env:
