@@ -194,6 +194,9 @@ export function QuestionStep({
       exit={{ opacity: 0, y: -12 }}
       transition={{ duration: 0.5 }}
       className="flex flex-1 flex-col"
+      data-testid="learn-step"
+      data-phase="question"
+      data-concept-id={concept.id}
     >
       <h2 className="mt-3 font-narrative text-[22px] leading-snug text-foreground sm:mt-4 sm:text-3xl">
         {concept.question}
@@ -208,6 +211,7 @@ export function QuestionStep({
       <button
         type="button"
         onClick={() => setShowHint(!showHint)}
+        data-testid="learn-hint-toggle"
         className="mt-3 flex w-full items-center justify-between rounded-xl border border-border/40 bg-card/40 px-3.5 py-2.5 text-left font-interface text-[13px] transition-colors hover:bg-card/60"
       >
         <span className="flex items-center gap-2 text-foreground">
@@ -244,7 +248,7 @@ export function QuestionStep({
         )}
       </AnimatePresence>
 
-      <ul className="mt-3 space-y-2">
+      <ul className="mt-3 space-y-2" data-testid="learn-answers">
         {displayAnswers.map((answer, i) => {
           const letter = String.fromCharCode(65 + i);
           const isSelected = selected === i;
@@ -253,6 +257,11 @@ export function QuestionStep({
               <button
                 type="button"
                 onClick={() => setSelected(i)}
+                data-testid="learn-answer"
+                data-answer-index={i}
+                data-source-index={answer.sourceIndex}
+                data-correct={answer.isCorrect ? "true" : "false"}
+                aria-pressed={isSelected}
                 className={`flex w-full items-start gap-3 rounded-xl border px-3.5 py-3 text-left font-interface text-[14px] leading-snug transition-all ${
                   isSelected
                     ? "border-primary bg-primary/10 text-foreground"
@@ -285,6 +294,7 @@ export function QuestionStep({
         type="button"
         onClick={onSubmit}
         disabled={selected === null}
+        data-testid="learn-submit"
         className="mt-4 inline-flex h-14 w-full items-center justify-center gap-2 rounded-full bg-primary text-base font-medium text-primary-foreground transition-opacity disabled:cursor-not-allowed disabled:opacity-40"
       >
         Submit <ArrowRight className="h-4 w-4" />
