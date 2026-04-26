@@ -158,6 +158,16 @@ function LearnPage() {
     if (selected === null) return;
     // Evaluate against isCorrect on the displayed answer — never positional.
     const correct = displayAnswers[selected]?.isCorrect === true;
+    void trackLearnEvent({
+      event: "answer_submitted",
+      conceptId: concept!.id,
+      stage: concept!.stage,
+      metadata: {
+        correct,
+        attempt: wrongAttempts + 1,
+        first_try_evaluated: wasCorrectFirstTry === null,
+      },
+    });
     if (wasCorrectFirstTry === null) {
       setWasCorrectFirstTry(correct);
     }
@@ -175,6 +185,16 @@ function LearnPage() {
       conceptId: concept!.id,
       wasCorrectFirstTry: firstTry,
     });
+    void trackLearnEvent({
+      event: "concept_completed",
+      conceptId: concept!.id,
+      stage: concept!.stage,
+      metadata: {
+        first_try: firstTry,
+        wrong_attempts: wrongAttempts,
+        used_hint: showHint,
+      },
+    });
     if (firstTry) {
       setSessionStreak((n) => n + 1);
     } else {
@@ -185,6 +205,20 @@ function LearnPage() {
   }
 
   function next() {
+    void trackLearnEvent({
+      event: "concept_advanced",
+      conceptId: concept!.id,
+      stage: concept!.stage,
+    });
+    // Also fire success_dismissed — these are conceptually distinct: one is
+    // "user closed the success screen", the other is "user moved on". For
+    // now they coincide because the transition screen has only one action,
+    // but keeping both lets us split them later if we add a "review" path.
+    void trackLearnEvent({
+      event: "success_dismissed",
+      conceptId: concept!.id,
+      stage: concept!.stage,
+    });
     // Clear the pinned concept so the effect adopts the next derived one.
     // If there is no next concept, the early-return below renders the
     // "Every signal received" completion screen.
