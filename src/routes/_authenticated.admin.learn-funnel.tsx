@@ -409,6 +409,83 @@ function LearnFunnelPage() {
               )}
             </div>
           </section>
+
+          <section className="mt-6 rounded-2xl border border-border/60 bg-card/40 p-5">
+            <h2 className="font-interface text-xs uppercase tracking-wider text-muted-foreground">
+              Stuck users
+            </h2>
+            <p className="mt-1 font-interface text-xs text-muted-foreground">
+              Users who completed a concept but never advanced from it.
+              Repeat completions on the same concept (≥2) are the strongest
+              signal — likely re-running the same step instead of moving on.
+            </p>
+            <div className="mt-3 overflow-x-auto">
+              <table className="w-full font-interface text-sm">
+                <thead>
+                  <tr className="text-left text-xs uppercase tracking-wider text-muted-foreground">
+                    <th className="py-2">User</th>
+                    <th className="py-2">Concept</th>
+                    <th className="py-2 text-right">Completions</th>
+                    <th className="py-2 text-right">Wrong</th>
+                    <th className="py-2 text-right">Last seen</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {stuckUsers.map((row) => {
+                    const repeatBad = row.completions >= 2;
+                    const wrongBad = row.wrongAttempts >= 3;
+                    return (
+                      <tr
+                        key={`${row.userId}-${row.conceptId}`}
+                        className="border-t border-border/40"
+                      >
+                        <td
+                          className="py-2 font-mono text-xs text-muted-foreground"
+                          title={row.userId}
+                        >
+                          {row.userId.slice(0, 8)}…
+                        </td>
+                        <td className="py-2 text-foreground">
+                          <span className="font-mono text-xs">
+                            {row.conceptId}
+                          </span>
+                          {row.stage && (
+                            <span className="ml-2 rounded-full border border-border/60 px-1.5 py-0.5 text-[10px] text-muted-foreground">
+                              {row.stage}
+                            </span>
+                          )}
+                        </td>
+                        <td
+                          className={`py-2 text-right tabular-nums ${repeatBad ? "text-destructive" : "text-foreground"}`}
+                        >
+                          {row.completions}
+                        </td>
+                        <td
+                          className={`py-2 text-right tabular-nums ${wrongBad ? "text-destructive" : "text-muted-foreground"}`}
+                        >
+                          {row.wrongAttempts}
+                        </td>
+                        <td className="py-2 text-right tabular-nums text-muted-foreground">
+                          {new Date(row.lastSeen).toLocaleString(undefined, {
+                            month: "short",
+                            day: "numeric",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+              {stuckUsers.length === 0 && (
+                <p className="mt-2 font-interface text-sm text-muted-foreground">
+                  No stuck users in this window — everyone who completed a
+                  concept advanced past it.
+                </p>
+              )}
+            </div>
+          </section>
         </>
       )}
     </div>
