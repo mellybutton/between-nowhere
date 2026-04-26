@@ -16,6 +16,7 @@ import { Route as AuthenticatedReviewRouteImport } from './routes/_authenticated
 import { Route as AuthenticatedPracticeRouteImport } from './routes/_authenticated.practice'
 import { Route as AuthenticatedLearnRouteImport } from './routes/_authenticated.learn'
 import { Route as AuthenticatedHomeRouteImport } from './routes/_authenticated.home'
+import { Route as AuthenticatedAdminLearnFunnelRouteImport } from './routes/_authenticated.admin.learn-funnel'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
@@ -51,6 +52,12 @@ const AuthenticatedHomeRoute = AuthenticatedHomeRouteImport.update({
   path: '/home',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedAdminLearnFunnelRoute =
+  AuthenticatedAdminLearnFunnelRouteImport.update({
+    id: '/admin/learn-funnel',
+    path: '/admin/learn-funnel',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -59,6 +66,7 @@ export interface FileRoutesByFullPath {
   '/learn': typeof AuthenticatedLearnRoute
   '/practice': typeof AuthenticatedPracticeRoute
   '/review': typeof AuthenticatedReviewRoute
+  '/admin/learn-funnel': typeof AuthenticatedAdminLearnFunnelRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -67,6 +75,7 @@ export interface FileRoutesByTo {
   '/learn': typeof AuthenticatedLearnRoute
   '/practice': typeof AuthenticatedPracticeRoute
   '/review': typeof AuthenticatedReviewRoute
+  '/admin/learn-funnel': typeof AuthenticatedAdminLearnFunnelRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -77,12 +86,27 @@ export interface FileRoutesById {
   '/_authenticated/learn': typeof AuthenticatedLearnRoute
   '/_authenticated/practice': typeof AuthenticatedPracticeRoute
   '/_authenticated/review': typeof AuthenticatedReviewRoute
+  '/_authenticated/admin/learn-funnel': typeof AuthenticatedAdminLearnFunnelRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/home' | '/learn' | '/practice' | '/review'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/home'
+    | '/learn'
+    | '/practice'
+    | '/review'
+    | '/admin/learn-funnel'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/home' | '/learn' | '/practice' | '/review'
+  to:
+    | '/'
+    | '/auth'
+    | '/home'
+    | '/learn'
+    | '/practice'
+    | '/review'
+    | '/admin/learn-funnel'
   id:
     | '__root__'
     | '/'
@@ -92,6 +116,7 @@ export interface FileRouteTypes {
     | '/_authenticated/learn'
     | '/_authenticated/practice'
     | '/_authenticated/review'
+    | '/_authenticated/admin/learn-funnel'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -151,6 +176,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedHomeRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/admin/learn-funnel': {
+      id: '/_authenticated/admin/learn-funnel'
+      path: '/admin/learn-funnel'
+      fullPath: '/admin/learn-funnel'
+      preLoaderRoute: typeof AuthenticatedAdminLearnFunnelRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
   }
 }
 
@@ -159,6 +191,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedLearnRoute: typeof AuthenticatedLearnRoute
   AuthenticatedPracticeRoute: typeof AuthenticatedPracticeRoute
   AuthenticatedReviewRoute: typeof AuthenticatedReviewRoute
+  AuthenticatedAdminLearnFunnelRoute: typeof AuthenticatedAdminLearnFunnelRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
@@ -166,6 +199,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedLearnRoute: AuthenticatedLearnRoute,
   AuthenticatedPracticeRoute: AuthenticatedPracticeRoute,
   AuthenticatedReviewRoute: AuthenticatedReviewRoute,
+  AuthenticatedAdminLearnFunnelRoute: AuthenticatedAdminLearnFunnelRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
