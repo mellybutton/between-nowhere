@@ -42,10 +42,30 @@ function LearnPage() {
     [rows],
   );
 
-  const concept = useMemo<LearnConcept | null>(
+  // The next concept derived purely from progress data. This can change
+  // mid-session as the cache refetches, so we MUST NOT bind the screen
+  // directly to it — instead we pin `activeConcept` below.
+  const nextConcept = useMemo<LearnConcept | null>(
     () => learnFlowConcepts.find((c) => !completedIds.has(c.id)) ?? null,
     [completedIds],
   );
+
+  // Pin the concept the user is currently working through. Only advances
+  // when `next()` is called explicitly — never silently swapped by a
+  // background refetch. This is what fixes the "stuck on success" loop.
+  const [activeConcept, setActiveConcept] = useState<LearnConcept | null>(
+    nextConcept,
+  );
+
+  // First time data arrives (or after we clear active to advance), adopt
+  // whatever the derived next concept is.
+  useEffect(() => {
+    if (activeConcept === null && nextConcept !== null) {
+      setActiveConcept(nextConcept);
+    }
+  }, [activeConcept, nextConcept]);
+
+  const concept = activeConcept;
 
   const [phase, setPhase] = useState<Phase>("hook");
   const [selected, setSelected] = useState<number | null>(null);
@@ -145,6 +165,10 @@ function LearnPage() {
   }
 
   function next() {
+    // Clear the pinned concept so the effect adopts the next derived one.
+    // If there is no next concept, the early-return below renders the
+    // "Every signal received" completion screen.
+    setActiveConcept(null);
     reset();
   }
 
