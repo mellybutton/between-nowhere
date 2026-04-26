@@ -104,7 +104,7 @@ function AuthPage() {
       </Link>
 
       <div className="relative z-10 mx-auto flex min-h-screen max-w-md flex-col justify-center px-6">
-        <div>
+        <div key={mode} className="animate-fade-in">
           <h1 className="font-narrative text-4xl leading-tight text-foreground">
             {mode === "signup" ? "Save your progress." : "Welcome back."}
           </h1>
