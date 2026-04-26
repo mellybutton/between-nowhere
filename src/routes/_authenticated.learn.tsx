@@ -297,7 +297,16 @@ function LearnPage() {
               selected={selected}
               setSelected={setSelected}
               showHint={showHint}
-              setShowHint={setShowHint}
+              setShowHint={(v) => {
+                if (v && !showHint) {
+                  void trackLearnEvent({
+                    event: "hint_revealed",
+                    conceptId: concept.id,
+                    stage: concept.stage,
+                  });
+                }
+                setShowHint(v);
+              }}
               onSubmit={submitAnswer}
               percent={stats.percent}
               wrongAttempts={wrongAttempts}
