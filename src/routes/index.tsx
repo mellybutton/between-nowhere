@@ -132,7 +132,7 @@ function IntroPage() {
                 await enterGuestMode();
                 navigate({ to: "/home" });
               }}
-              className="relative inline-flex h-14 w-full max-w-[280px] items-center justify-center gap-2 overflow-hidden rounded-full bg-primary text-base font-medium text-primary-foreground shadow-[0_10px_40px_-10px_oklch(0.55_0.18_275/0.7)] transition-transform hover:scale-[1.02] active:scale-[0.99]"
+              className="relative inline-flex h-14 w-full max-w-[280px] items-center justify-center gap-2 overflow-hidden rounded-full border-2 border-primary-accent/80 bg-background/20 text-base font-semibold text-foreground shadow-[inset_0_0_0_1px_oklch(var(--foreground)/0.16),0_0_24px_-16px_oklch(var(--primary-accent))] backdrop-blur-md transition-transform hover:scale-[1.02] hover:bg-primary/10 active:scale-[0.99]"
             >
               <span className="relative z-10">Start learning — free</span>
               <ArrowRight className="relative z-10 h-4 w-4" />
@@ -280,7 +280,7 @@ function IntroPage() {
               await enterGuestMode();
               navigate({ to: "/home" });
             }}
-            className="mt-7 inline-flex h-14 w-full max-w-[280px] items-center justify-center gap-2 rounded-full bg-primary text-base font-medium text-primary-foreground shadow-[0_10px_40px_-10px_oklch(0.55_0.18_275/0.7)] transition-transform hover:scale-[1.02] active:scale-[0.99]"
+              className="mt-7 inline-flex h-14 w-full max-w-[280px] items-center justify-center gap-2 rounded-full border-2 border-primary-accent/80 bg-background/20 text-base font-semibold text-foreground shadow-[inset_0_0_0_1px_oklch(var(--foreground)/0.16),0_0_24px_-16px_oklch(var(--primary-accent))] backdrop-blur-md transition-transform hover:scale-[1.02] hover:bg-primary/10 active:scale-[0.99]"
           >
             Begin <ArrowRight className="h-4 w-4" />
           </button>
