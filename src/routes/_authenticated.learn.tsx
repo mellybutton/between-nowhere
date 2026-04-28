@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { learnFlowConcepts, type LearnConcept } from "@/data/learnFlow";
@@ -30,18 +30,45 @@ type Phase = "hook" | "insight" | "question" | "reveal" | "transition";
 function LearnPage() {
   const navigate = useNavigate();
   const { data: rows } = useConceptProgress();
-  const stats = deriveProgressStats(rows);
-  const recordConcept = useRecordConcept();
-
-  const completedIds = useMemo(
-    () =>
-      new Set(
-        (rows ?? [])
-          .filter((r) => r.status === "completed")
-          .map((r) => r.concept_id),
-      ),
-    [rows],
+  const [sessionCompletedIds, setSessionCompletedIds] = useState<Set<string>>(
+    () => new Set(),
   );
+  const recordConcept = useRecordConcept();
+  const completingRef = useRef(false);
+  const [isCompleting, setIsCompleting] = useState(false);
+
+  const completedIds = useMemo(() => {
+    const ids = new Set(
+      (rows ?? [])
+        .filter((r) => r.status === "completed")
+        .map((r) => r.concept_id),
+    );
+    sessionCompletedIds.forEach((id) => ids.add(id));
+    return ids;
+  }, [rows, sessionCompletedIds]);
+
+  const stats = useMemo(() => {
+    const optimisticRows = [
+      ...(rows ?? []),
+      ...[...sessionCompletedIds]
+        .filter(
+          (id) =>
+            !(rows ?? []).some(
+              (r) => r.status === "completed" && r.concept_id === id,
+            ),
+        )
+        .map((id) => ({
+          id: `session-${id}`,
+          user_id: "session",
+          concept_id: id,
+          status: "completed" as const,
+          attempts: 1,
+          was_correct_first_try: null,
+          completed_at: new Date(0).toISOString(),
+        })),
+    ];
+    return deriveProgressStats(optimisticRows);
+  }, [rows, sessionCompletedIds]);
 
   // The next concept derived purely from progress data. This can change
   // mid-session as the cache refetches, so we MUST NOT bind the screen
@@ -54,17 +81,16 @@ function LearnPage() {
   // Pin the concept the user is currently working through. Only advances
   // when `next()` is called explicitly — never silently swapped by a
   // background refetch. This is what fixes the "stuck on success" loop.
-  const [activeConcept, setActiveConcept] = useState<LearnConcept | null>(
-    nextConcept,
-  );
+  const [activeConcept, setActiveConcept] = useState<LearnConcept | null>(null);
+  const progressReady = rows !== undefined;
 
   // First time data arrives (or after we clear active to advance), adopt
   // whatever the derived next concept is.
   useEffect(() => {
-    if (activeConcept === null && nextConcept !== null) {
+    if (progressReady && activeConcept === null && nextConcept !== null) {
       setActiveConcept(nextConcept);
     }
-  }, [activeConcept, nextConcept]);
+  }, [activeConcept, nextConcept, progressReady]);
 
   const concept = activeConcept;
 
@@ -109,9 +135,7 @@ function LearnPage() {
   // Fire flow_completed once when the user reaches the "all done" screen.
   // Guarded by activeConcept === null + completed rows so this never fires
   // on initial mount before data has loaded.
-  const completedCount = (rows ?? []).filter(
-    (r) => r.status === "completed",
-  ).length;
+  const completedCount = completedIds.size;
   const flowComplete =
     activeConcept === null &&
     completedCount >= learnFlowConcepts.length &&
@@ -139,6 +163,14 @@ function LearnPage() {
   }, [rows]);
 
   const currentStreak = baseStreak + sessionStreak;
+
+  if ((!progressReady && !concept) || (!concept && nextConcept)) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-background">
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+      </div>
+    );
+  }
 
   if (!concept) {
     return (
@@ -199,15 +231,21 @@ function LearnPage() {
   }
 
   async function complete() {
+    if (completingRef.current) return;
+    completingRef.current = true;
+    setIsCompleting(true);
     const firstTry = wasCorrectFirstTry ?? false;
+    const completedConceptId = concept!.id;
+    const completedStage = concept!.stage;
     await recordConcept.mutateAsync({
-      conceptId: concept!.id,
+      conceptId: completedConceptId,
       wasCorrectFirstTry: firstTry,
     });
+    setSessionCompletedIds((ids) => new Set(ids).add(completedConceptId));
     void trackLearnEvent({
       event: "concept_completed",
-      conceptId: concept!.id,
-      stage: concept!.stage,
+      conceptId: completedConceptId,
+      stage: completedStage,
       metadata: {
         first_try: firstTry,
         wrong_attempts: wrongAttempts,
@@ -221,13 +259,17 @@ function LearnPage() {
       setSessionStreak(0);
     }
     setPhase("transition");
+    setIsCompleting(false);
+    completingRef.current = false;
   }
 
   function next() {
+    const completedConceptId = concept!.id;
+    const completedStage = concept!.stage;
     void trackLearnEvent({
       event: "concept_advanced",
-      conceptId: concept!.id,
-      stage: concept!.stage,
+      conceptId: completedConceptId,
+      stage: completedStage,
     });
     // Also fire success_dismissed — these are conceptually distinct: one is
     // "user closed the success screen", the other is "user moved on". For
@@ -235,9 +277,10 @@ function LearnPage() {
     // but keeping both lets us split them later if we add a "review" path.
     void trackLearnEvent({
       event: "success_dismissed",
-      conceptId: concept!.id,
-      stage: concept!.stage,
+      conceptId: completedConceptId,
+      stage: completedStage,
     });
+    setSessionCompletedIds((ids) => new Set(ids).add(completedConceptId));
     // Clear the pinned concept so the effect adopts the next derived one.
     // If there is no next concept, the early-return below renders the
     // "Every signal received" completion screen.
@@ -325,7 +368,7 @@ function LearnPage() {
               onContinue={complete}
               percent={stats.percent}
               isFirstTry={wasCorrectFirstTry === true}
-              loading={recordConcept.isPending}
+              loading={recordConcept.isPending || isCompleting}
               streak={currentStreak + (wasCorrectFirstTry ? 1 : 0)}
             />
           )}
