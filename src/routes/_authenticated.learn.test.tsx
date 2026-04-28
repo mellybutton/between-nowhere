@@ -226,6 +226,33 @@ async function completeOneConcept(conceptIndex: number) {
   });
 }
 
+async function completeOneConceptAfterWrongAnswer(conceptIndex: number) {
+  const user = userEvent.setup();
+  const concept = learnFlowConcepts[conceptIndex];
+
+  await user.click(await screen.findByRole("button", { name: /continue/i }));
+  await user.click(await screen.findByRole("button", { name: /^next$/i }));
+
+  const wrongText = concept.answers.find(
+    (_answer, index) => index !== concept.correctIndex,
+  )!;
+  await user.click(await screen.findByText(wrongText));
+  await user.click(await screen.findByRole("button", { name: /submit/i }));
+
+  const correctText = concept.answers[concept.correctIndex];
+  await user.click(await screen.findByText(correctText));
+  await user.click(await screen.findByRole("button", { name: /submit/i }));
+
+  const revealButtons = await screen.findAllByRole("button", {
+    name: /^continue$/i,
+  });
+  expect(revealButtons).toHaveLength(1);
+
+  await act(async () => {
+    await user.click(revealButtons[0]);
+  });
+}
+
 // ---- Tests ---------------------------------------------------------------
 
 beforeEach(() => {
@@ -326,6 +353,28 @@ describe("Learn flow — no infinite success loop", () => {
     await userEvent.setup().click(nextBtn);
 
     // Concept 1 hook should appear, and concept 0's reveal artifacts must be gone.
+    expect(await screen.findByText(learnFlowConcepts[1].hook)).toBeInTheDocument();
+    expect(
+      screen.queryByText(learnFlowConcepts[0].correctAnswerText),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByText(learnFlowConcepts[0].continueText),
+    ).not.toBeInTheDocument();
+  });
+
+  it("regression: wrong answer then right answer advances only one concept", async () => {
+    await renderLearnPage();
+    await completeOneConceptAfterWrongAnswer(0);
+
+    expect(progressState.rows).toHaveLength(1);
+    expect(progressState.rows[0].concept_id).toBe(learnFlowConcepts[0].id);
+    expect(progressState.rows[0].was_correct_first_try).toBe(false);
+
+    const nextBtn = await screen.findByRole("button", {
+      name: /next concept/i,
+    });
+    await userEvent.setup().click(nextBtn);
+
     expect(await screen.findByText(learnFlowConcepts[1].hook)).toBeInTheDocument();
     expect(
       screen.queryByText(learnFlowConcepts[0].correctAnswerText),
