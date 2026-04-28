@@ -260,6 +260,22 @@ async function completeOneConceptAfterWrongAnswer(conceptIndex: number) {
   });
 }
 
+async function finishTransitionToNextConcept(currentIndex: number) {
+  const nextBtn = await screen.findByRole("button", {
+    name: /next concept/i,
+  });
+  await userEvent.setup().click(nextBtn);
+
+  const nextConcept = learnFlowConcepts[currentIndex + 1];
+  expect(await screen.findByText(nextConcept.hook)).toBeInTheDocument();
+  expect(
+    screen.queryByText(learnFlowConcepts[currentIndex].correctAnswerText),
+  ).not.toBeInTheDocument();
+  expect(
+    screen.queryByText(learnFlowConcepts[currentIndex].continueText),
+  ).not.toBeInTheDocument();
+}
+
 // ---- Tests ---------------------------------------------------------------
 
 beforeEach(() => {
