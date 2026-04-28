@@ -83,10 +83,14 @@ vi.mock("@/components/illustrations/ConceptIllustrations", () => ({
 type ProgressState = {
   rows: ConceptProgressRow[];
   resolveNextMutation: (() => void) | null;
+  persistMutationRows: boolean;
+  mutationCalls: number;
 };
 const progressState: ProgressState = {
   rows: [],
   resolveNextMutation: null,
+  persistMutationRows: true,
+  mutationCalls: 0,
 };
 const listeners = new Set<() => void>();
 const notify = () => listeners.forEach((l) => l());
@@ -118,13 +122,16 @@ vi.mock("@/lib/progress", async () => {
         conceptId: string;
         wasCorrectFirstTry: boolean;
       }) => {
-        // Add the completed row.
-        progressState.rows = [
-          ...progressState.rows,
-          makeRow(input.conceptId, input.wasCorrectFirstTry),
-        ];
-        // Notify subscribers (simulates query cache invalidation completing).
-        notify();
+        progressState.mutationCalls += 1;
+        if (progressState.persistMutationRows) {
+          // Add the completed row.
+          progressState.rows = [
+            ...progressState.rows,
+            makeRow(input.conceptId, input.wasCorrectFirstTry),
+          ];
+          // Notify subscribers (simulates query cache invalidation completing).
+          notify();
+        }
         // Yield once so React can flush before the caller advances phase.
         await Promise.resolve();
       },
@@ -258,6 +265,8 @@ async function completeOneConceptAfterWrongAnswer(conceptIndex: number) {
 beforeEach(() => {
   progressState.rows = [];
   progressState.resolveNextMutation = null;
+  progressState.persistMutationRows = true;
+  progressState.mutationCalls = 0;
   listeners.clear();
 });
 
