@@ -408,4 +408,80 @@ describe("Learn flow — no infinite success loop", () => {
       screen.queryByText(learnFlowConcepts[0].continueText),
     ).not.toBeInTheDocument();
   });
+
+  it.each([
+    { label: "one wrong attempt", wrongAttempts: 1 },
+    { label: "two wrong attempts", wrongAttempts: 2 },
+  ])(
+    "regression matrix: $label still leaves success once",
+    async ({ wrongAttempts }) => {
+      await renderLearnPage();
+      const user = userEvent.setup();
+      const concept = learnFlowConcepts[0];
+
+      await user.click(await screen.findByRole("button", { name: /continue/i }));
+      await user.click(await screen.findByRole("button", { name: /^next$/i }));
+
+      const wrongAnswers = concept.answers.filter(
+        (_answer, index) => index !== concept.correctIndex,
+      );
+      for (let i = 0; i < wrongAttempts; i += 1) {
+        await user.click(await screen.findByText(wrongAnswers[i]));
+        await user.click(await screen.findByRole("button", { name: /submit/i }));
+      }
+
+      await user.click(await screen.findByText(concept.answers[concept.correctIndex]));
+      await user.click(await screen.findByRole("button", { name: /submit/i }));
+      const revealContinue = await screen.findByTestId("learn-reveal-continue");
+
+      await act(async () => {
+        await user.click(revealContinue);
+      });
+
+      expect(progressState.mutationCalls).toBe(1);
+      await finishTransitionToNextConcept(0);
+    },
+  );
+
+  it("regression: double-tapping reveal continue records once and does not loop", async () => {
+    await renderLearnPage();
+    const user = userEvent.setup();
+    const concept = learnFlowConcepts[0];
+
+    await user.click(await screen.findByRole("button", { name: /continue/i }));
+    await user.click(await screen.findByRole("button", { name: /^next$/i }));
+    await user.click(await screen.findByText(concept.answers[concept.correctIndex]));
+    await user.click(await screen.findByRole("button", { name: /submit/i }));
+
+    const revealContinue = await screen.findByTestId("learn-reveal-continue");
+    await act(async () => {
+      await Promise.all([user.click(revealContinue), user.click(revealContinue)]);
+    });
+
+    expect(progressState.mutationCalls).toBe(1);
+    await finishTransitionToNextConcept(0);
+  });
+
+  it("regression: stale progress refetch cannot resurrect dismissed success", async () => {
+    progressState.persistMutationRows = false;
+    await renderLearnPage();
+
+    await completeOneConceptAfterWrongAnswer(0);
+    expect(progressState.rows).toHaveLength(0);
+    expect(progressState.mutationCalls).toBe(1);
+
+    await finishTransitionToNextConcept(0);
+
+    act(() => {
+      notify();
+    });
+
+    expect(await screen.findByText(learnFlowConcepts[1].hook)).toBeInTheDocument();
+    expect(
+      screen.queryByText(learnFlowConcepts[0].correctAnswerText),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByText(learnFlowConcepts[0].continueText),
+    ).not.toBeInTheDocument();
+  });
 });
