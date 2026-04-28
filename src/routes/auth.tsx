@@ -198,7 +198,7 @@ function AuthPage() {
             await enterGuestMode();
             navigate({ to: "/home" });
           }}
-          className="mt-4 inline-flex h-14 w-full items-center justify-center gap-2 rounded-full border border-border/60 bg-transparent text-sm font-medium text-foreground transition-colors hover:bg-card/40"
+          className="mt-4 inline-flex h-14 w-full items-center justify-center gap-2 rounded-full border-2 border-primary-accent/80 bg-background/20 text-sm font-semibold text-foreground shadow-[inset_0_0_0_1px_oklch(var(--foreground)/0.16),0_0_24px_-16px_oklch(var(--primary-accent))] transition-colors hover:bg-primary/10 disabled:opacity-50"
         >
           Just let me explore →
         </button>
