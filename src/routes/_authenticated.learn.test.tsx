@@ -83,10 +83,14 @@ vi.mock("@/components/illustrations/ConceptIllustrations", () => ({
 type ProgressState = {
   rows: ConceptProgressRow[];
   resolveNextMutation: (() => void) | null;
+  persistMutationRows: boolean;
+  mutationCalls: number;
 };
 const progressState: ProgressState = {
   rows: [],
   resolveNextMutation: null,
+  persistMutationRows: true,
+  mutationCalls: 0,
 };
 const listeners = new Set<() => void>();
 const notify = () => listeners.forEach((l) => l());
@@ -118,13 +122,16 @@ vi.mock("@/lib/progress", async () => {
         conceptId: string;
         wasCorrectFirstTry: boolean;
       }) => {
-        // Add the completed row.
-        progressState.rows = [
-          ...progressState.rows,
-          makeRow(input.conceptId, input.wasCorrectFirstTry),
-        ];
-        // Notify subscribers (simulates query cache invalidation completing).
-        notify();
+        progressState.mutationCalls += 1;
+        if (progressState.persistMutationRows) {
+          // Add the completed row.
+          progressState.rows = [
+            ...progressState.rows,
+            makeRow(input.conceptId, input.wasCorrectFirstTry),
+          ];
+          // Notify subscribers (simulates query cache invalidation completing).
+          notify();
+        }
         // Yield once so React can flush before the caller advances phase.
         await Promise.resolve();
       },
@@ -253,11 +260,29 @@ async function completeOneConceptAfterWrongAnswer(conceptIndex: number) {
   });
 }
 
+async function finishTransitionToNextConcept(currentIndex: number) {
+  const nextBtn = await screen.findByRole("button", {
+    name: /next concept/i,
+  });
+  await userEvent.setup().click(nextBtn);
+
+  const nextConcept = learnFlowConcepts[currentIndex + 1];
+  expect(await screen.findByText(nextConcept.hook)).toBeInTheDocument();
+  expect(
+    screen.queryByText(learnFlowConcepts[currentIndex].correctAnswerText),
+  ).not.toBeInTheDocument();
+  expect(
+    screen.queryByText(learnFlowConcepts[currentIndex].continueText),
+  ).not.toBeInTheDocument();
+}
+
 // ---- Tests ---------------------------------------------------------------
 
 beforeEach(() => {
   progressState.rows = [];
   progressState.resolveNextMutation = null;
+  progressState.persistMutationRows = true;
+  progressState.mutationCalls = 0;
   listeners.clear();
 });
 
@@ -374,6 +399,82 @@ describe("Learn flow — no infinite success loop", () => {
       name: /next concept/i,
     });
     await userEvent.setup().click(nextBtn);
+
+    expect(await screen.findByText(learnFlowConcepts[1].hook)).toBeInTheDocument();
+    expect(
+      screen.queryByText(learnFlowConcepts[0].correctAnswerText),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByText(learnFlowConcepts[0].continueText),
+    ).not.toBeInTheDocument();
+  });
+
+  it.each([
+    { label: "one wrong attempt", wrongAttempts: 1 },
+    { label: "two wrong attempts", wrongAttempts: 2 },
+  ])(
+    "regression matrix: $label still leaves success once",
+    async ({ wrongAttempts }) => {
+      await renderLearnPage();
+      const user = userEvent.setup();
+      const concept = learnFlowConcepts[0];
+
+      await user.click(await screen.findByRole("button", { name: /continue/i }));
+      await user.click(await screen.findByRole("button", { name: /^next$/i }));
+
+      const wrongAnswers = concept.answers.filter(
+        (_answer, index) => index !== concept.correctIndex,
+      );
+      for (let i = 0; i < wrongAttempts; i += 1) {
+        await user.click(await screen.findByText(wrongAnswers[i]));
+        await user.click(await screen.findByRole("button", { name: /submit/i }));
+      }
+
+      await user.click(await screen.findByText(concept.answers[concept.correctIndex]));
+      await user.click(await screen.findByRole("button", { name: /submit/i }));
+      const revealContinue = await screen.findByTestId("learn-reveal-continue");
+
+      await act(async () => {
+        await user.click(revealContinue);
+      });
+
+      expect(progressState.mutationCalls).toBe(1);
+      await finishTransitionToNextConcept(0);
+    },
+  );
+
+  it("regression: double-tapping reveal continue records once and does not loop", async () => {
+    await renderLearnPage();
+    const user = userEvent.setup();
+    const concept = learnFlowConcepts[0];
+
+    await user.click(await screen.findByRole("button", { name: /continue/i }));
+    await user.click(await screen.findByRole("button", { name: /^next$/i }));
+    await user.click(await screen.findByText(concept.answers[concept.correctIndex]));
+    await user.click(await screen.findByRole("button", { name: /submit/i }));
+
+    const revealContinue = await screen.findByTestId("learn-reveal-continue");
+    await act(async () => {
+      await Promise.all([user.click(revealContinue), user.click(revealContinue)]);
+    });
+
+    expect(progressState.mutationCalls).toBe(1);
+    await finishTransitionToNextConcept(0);
+  });
+
+  it("regression: stale progress refetch cannot resurrect dismissed success", async () => {
+    progressState.persistMutationRows = false;
+    await renderLearnPage();
+
+    await completeOneConceptAfterWrongAnswer(0);
+    expect(progressState.rows).toHaveLength(0);
+    expect(progressState.mutationCalls).toBe(1);
+
+    await finishTransitionToNextConcept(0);
+
+    act(() => {
+      notify();
+    });
 
     expect(await screen.findByText(learnFlowConcepts[1].hook)).toBeInTheDocument();
     expect(
