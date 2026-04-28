@@ -33,7 +33,6 @@ function LearnPage() {
   const [sessionCompletedIds, setSessionCompletedIds] = useState<Set<string>>(
     () => new Set(),
   );
-  const stats = deriveProgressStats(rows);
   const recordConcept = useRecordConcept();
   const completingRef = useRef(false);
   const [isCompleting, setIsCompleting] = useState(false);
@@ -46,6 +45,29 @@ function LearnPage() {
     );
     sessionCompletedIds.forEach((id) => ids.add(id));
     return ids;
+  }, [rows, sessionCompletedIds]);
+
+  const stats = useMemo(() => {
+    const optimisticRows = [
+      ...(rows ?? []),
+      ...[...sessionCompletedIds]
+        .filter(
+          (id) =>
+            !(rows ?? []).some(
+              (r) => r.status === "completed" && r.concept_id === id,
+            ),
+        )
+        .map((id) => ({
+          id: `session-${id}`,
+          user_id: "session",
+          concept_id: id,
+          status: "completed" as const,
+          attempts: 1,
+          was_correct_first_try: null,
+          completed_at: new Date(0).toISOString(),
+        })),
+    ];
+    return deriveProgressStats(optimisticRows);
   }, [rows, sessionCompletedIds]);
 
   // The next concept derived purely from progress data. This can change
@@ -113,9 +135,7 @@ function LearnPage() {
   // Fire flow_completed once when the user reaches the "all done" screen.
   // Guarded by activeConcept === null + completed rows so this never fires
   // on initial mount before data has loaded.
-  const completedCount = (rows ?? []).filter(
-    (r) => r.status === "completed",
-  ).length;
+  const completedCount = completedIds.size;
   const flowComplete =
     activeConcept === null &&
     completedCount >= learnFlowConcepts.length &&
@@ -143,6 +163,14 @@ function LearnPage() {
   }, [rows]);
 
   const currentStreak = baseStreak + sessionStreak;
+
+  if (!progressReady && !concept) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-background">
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+      </div>
+    );
+  }
 
   if (!concept) {
     return (
