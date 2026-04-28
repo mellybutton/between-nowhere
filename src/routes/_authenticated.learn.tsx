@@ -203,15 +203,21 @@ function LearnPage() {
   }
 
   async function complete() {
+    if (completingRef.current) return;
+    completingRef.current = true;
+    setIsCompleting(true);
     const firstTry = wasCorrectFirstTry ?? false;
+    const completedConceptId = concept!.id;
+    const completedStage = concept!.stage;
     await recordConcept.mutateAsync({
-      conceptId: concept!.id,
+      conceptId: completedConceptId,
       wasCorrectFirstTry: firstTry,
     });
+    setSessionCompletedIds((ids) => new Set(ids).add(completedConceptId));
     void trackLearnEvent({
       event: "concept_completed",
-      conceptId: concept!.id,
-      stage: concept!.stage,
+      conceptId: completedConceptId,
+      stage: completedStage,
       metadata: {
         first_try: firstTry,
         wrong_attempts: wrongAttempts,
@@ -225,13 +231,17 @@ function LearnPage() {
       setSessionStreak(0);
     }
     setPhase("transition");
+    setIsCompleting(false);
+    completingRef.current = false;
   }
 
   function next() {
+    const completedConceptId = concept!.id;
+    const completedStage = concept!.stage;
     void trackLearnEvent({
       event: "concept_advanced",
-      conceptId: concept!.id,
-      stage: concept!.stage,
+      conceptId: completedConceptId,
+      stage: completedStage,
     });
     // Also fire success_dismissed — these are conceptually distinct: one is
     // "user closed the success screen", the other is "user moved on". For
@@ -239,9 +249,10 @@ function LearnPage() {
     // but keeping both lets us split them later if we add a "review" path.
     void trackLearnEvent({
       event: "success_dismissed",
-      conceptId: concept!.id,
-      stage: concept!.stage,
+      conceptId: completedConceptId,
+      stage: completedStage,
     });
+    setSessionCompletedIds((ids) => new Set(ids).add(completedConceptId));
     // Clear the pinned concept so the effect adopts the next derived one.
     // If there is no next concept, the early-return below renders the
     // "Every signal received" completion screen.
