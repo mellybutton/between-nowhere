@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { learnFlowConcepts, type LearnConcept } from "@/data/learnFlow";
@@ -30,18 +30,23 @@ type Phase = "hook" | "insight" | "question" | "reveal" | "transition";
 function LearnPage() {
   const navigate = useNavigate();
   const { data: rows } = useConceptProgress();
+  const [sessionCompletedIds, setSessionCompletedIds] = useState<Set<string>>(
+    () => new Set(),
+  );
   const stats = deriveProgressStats(rows);
   const recordConcept = useRecordConcept();
+  const completingRef = useRef(false);
+  const [isCompleting, setIsCompleting] = useState(false);
 
-  const completedIds = useMemo(
-    () =>
-      new Set(
-        (rows ?? [])
-          .filter((r) => r.status === "completed")
-          .map((r) => r.concept_id),
-      ),
-    [rows],
-  );
+  const completedIds = useMemo(() => {
+    const ids = new Set(
+      (rows ?? [])
+        .filter((r) => r.status === "completed")
+        .map((r) => r.concept_id),
+    );
+    sessionCompletedIds.forEach((id) => ids.add(id));
+    return ids;
+  }, [rows, sessionCompletedIds]);
 
   // The next concept derived purely from progress data. This can change
   // mid-session as the cache refetches, so we MUST NOT bind the screen
@@ -54,17 +59,16 @@ function LearnPage() {
   // Pin the concept the user is currently working through. Only advances
   // when `next()` is called explicitly — never silently swapped by a
   // background refetch. This is what fixes the "stuck on success" loop.
-  const [activeConcept, setActiveConcept] = useState<LearnConcept | null>(
-    nextConcept,
-  );
+  const [activeConcept, setActiveConcept] = useState<LearnConcept | null>(null);
+  const progressReady = rows !== undefined;
 
   // First time data arrives (or after we clear active to advance), adopt
   // whatever the derived next concept is.
   useEffect(() => {
-    if (activeConcept === null && nextConcept !== null) {
+    if (progressReady && activeConcept === null && nextConcept !== null) {
       setActiveConcept(nextConcept);
     }
-  }, [activeConcept, nextConcept]);
+  }, [activeConcept, nextConcept, progressReady]);
 
   const concept = activeConcept;
 
