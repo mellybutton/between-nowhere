@@ -164,7 +164,7 @@ function LearnPage() {
 
   const currentStreak = baseStreak + sessionStreak;
 
-  if (!progressReady && !concept) {
+  if ((!progressReady && !concept) || (!concept && nextConcept)) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background">
         <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent" />
@@ -368,7 +368,7 @@ function LearnPage() {
               onContinue={complete}
               percent={stats.percent}
               isFirstTry={wasCorrectFirstTry === true}
-              loading={recordConcept.isPending}
+              loading={recordConcept.isPending || isCompleting}
               streak={currentStreak + (wasCorrectFirstTry ? 1 : 0)}
             />
           )}
