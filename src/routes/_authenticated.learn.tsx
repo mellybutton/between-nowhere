@@ -17,7 +17,6 @@ import {
   InsightStep,
   QuestionStep,
   RevealStep,
-  TransitionStep,
 } from "@/components/learn/LearnSteps";
 import heroBg from "@/assets/hero-night.webp";
 
@@ -25,7 +24,7 @@ export const Route = createFileRoute("/_authenticated/learn")({
   component: LearnPage,
 });
 
-type Phase = "hook" | "insight" | "question" | "reveal" | "transition";
+type Phase = "hook" | "insight" | "question" | "reveal";
 
 function LearnPage() {
   const navigate = useNavigate();
@@ -231,6 +230,10 @@ function LearnPage() {
   }
 
   async function complete() {
+    // Single "advance" handler from the reveal screen. Records progress,
+    // fires telemetry, and moves directly to the next concept — no second
+    // success/transition screen in between (that was the "two success
+    // screens" UX bug).
     if (completingRef.current) return;
     completingRef.current = true;
     setIsCompleting(true);
@@ -241,7 +244,6 @@ function LearnPage() {
       conceptId: completedConceptId,
       wasCorrectFirstTry: firstTry,
     });
-    setSessionCompletedIds((ids) => new Set(ids).add(completedConceptId));
     void trackLearnEvent({
       event: "concept_completed",
       conceptId: completedConceptId,
@@ -252,44 +254,30 @@ function LearnPage() {
         used_hint: showHint,
       },
     });
-    if (firstTry) {
-      setSessionStreak((n) => n + 1);
-    } else {
-      // breaks the streak
-      setSessionStreak(0);
-    }
-    setPhase("transition");
-    setIsCompleting(false);
-    completingRef.current = false;
-  }
-
-  function next() {
-    const completedConceptId = concept!.id;
-    const completedStage = concept!.stage;
-    const nextCompletedIds = new Set(completedIds);
-    nextCompletedIds.add(completedConceptId);
-    const upcomingConcept =
-      learnFlowConcepts.find((c) => !nextCompletedIds.has(c.id)) ?? null;
     void trackLearnEvent({
       event: "concept_advanced",
       conceptId: completedConceptId,
       stage: completedStage,
     });
-    // Also fire success_dismissed — these are conceptually distinct: one is
-    // "user closed the success screen", the other is "user moved on". For
-    // now they coincide because the transition screen has only one action,
-    // but keeping both lets us split them later if we add a "review" path.
     void trackLearnEvent({
       event: "success_dismissed",
       conceptId: completedConceptId,
       stage: completedStage,
     });
+    if (firstTry) {
+      setSessionStreak((n) => n + 1);
+    } else {
+      setSessionStreak(0);
+    }
+    const nextCompletedIds = new Set(completedIds);
+    nextCompletedIds.add(completedConceptId);
+    const upcomingConcept =
+      learnFlowConcepts.find((c) => !nextCompletedIds.has(c.id)) ?? null;
     setSessionCompletedIds((ids) => new Set(ids).add(completedConceptId));
     reset();
-    // Move the pinned screen directly to the next uncompleted concept instead
-    // of briefly clearing it and letting a later effect re-adopt from cache.
-    // That makes the transition independent of stale progress refetch timing.
     setActiveConcept(upcomingConcept);
+    setIsCompleting(false);
+    completingRef.current = false;
   }
 
   return (
@@ -374,15 +362,6 @@ function LearnPage() {
               isFirstTry={wasCorrectFirstTry === true}
               loading={recordConcept.isPending || isCompleting}
               streak={currentStreak + (wasCorrectFirstTry ? 1 : 0)}
-            />
-          )}
-          {phase === "transition" && (
-            <TransitionStep
-              key="transition"
-              text={concept.continueText}
-              conceptId={concept.id}
-              onContinue={next}
-              percent={stats.percent}
             />
           )}
         </AnimatePresence>
