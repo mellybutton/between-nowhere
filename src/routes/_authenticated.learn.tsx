@@ -17,7 +17,6 @@ import {
   InsightStep,
   QuestionStep,
   RevealStep,
-  TransitionStep,
 } from "@/components/learn/LearnSteps";
 import heroBg from "@/assets/hero-night.webp";
 
@@ -25,7 +24,7 @@ export const Route = createFileRoute("/_authenticated/learn")({
   component: LearnPage,
 });
 
-type Phase = "hook" | "insight" | "question" | "reveal" | "transition";
+type Phase = "hook" | "insight" | "question" | "reveal";
 
 function LearnPage() {
   const navigate = useNavigate();
