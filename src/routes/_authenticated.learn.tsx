@@ -266,6 +266,10 @@ function LearnPage() {
   function next() {
     const completedConceptId = concept!.id;
     const completedStage = concept!.stage;
+    const nextCompletedIds = new Set(completedIds);
+    nextCompletedIds.add(completedConceptId);
+    const upcomingConcept =
+      learnFlowConcepts.find((c) => !nextCompletedIds.has(c.id)) ?? null;
     void trackLearnEvent({
       event: "concept_advanced",
       conceptId: completedConceptId,
@@ -281,11 +285,11 @@ function LearnPage() {
       stage: completedStage,
     });
     setSessionCompletedIds((ids) => new Set(ids).add(completedConceptId));
-    // Clear the pinned concept so the effect adopts the next derived one.
-    // If there is no next concept, the early-return below renders the
-    // "Every signal received" completion screen.
-    setActiveConcept(null);
     reset();
+    // Move the pinned screen directly to the next uncompleted concept instead
+    // of briefly clearing it and letting a later effect re-adopt from cache.
+    // That makes the transition independent of stale progress refetch timing.
+    setActiveConcept(upcomingConcept);
   }
 
   return (
