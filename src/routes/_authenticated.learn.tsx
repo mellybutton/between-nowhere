@@ -365,15 +365,6 @@ function LearnPage() {
               streak={currentStreak + (wasCorrectFirstTry ? 1 : 0)}
             />
           )}
-          {phase === "transition" && (
-            <TransitionStep
-              key="transition"
-              text={concept.continueText}
-              conceptId={concept.id}
-              onContinue={next}
-              percent={stats.percent}
-            />
-          )}
         </AnimatePresence>
       </div>
     </div>
